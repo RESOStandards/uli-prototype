@@ -29,7 +29,7 @@ jobs:
       - name: Docker Compose Build
         run: |
           echo Building Test Environment!   
-          run: docker-compose build --build-arg MODE=test
+          run: docker-compose up --build -d --build-arg MODE=test
           
           echo Runing tests...
           run: python3 -m pytest
