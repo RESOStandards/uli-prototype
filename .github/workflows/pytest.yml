@@ -40,5 +40,5 @@ jobs:
       - name: Run Python Tests
         run: | 
           python3 -m pip install --upgrade pip
-          python3 -m pip install pytest requests json
+          python3 -m pip install pytest requests
           python3 -m pytest
