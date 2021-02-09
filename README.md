@@ -1,3 +1,5 @@
+![Test Flask App](https://github.com/RESOStandards/uli-prototype/workflows/Test%20Flask%20App/badge.svg)
+
 # Centralized ULI Registry Proof of Concept
 Welcome to the rough proof of concept of a centralized ULI Service
 
