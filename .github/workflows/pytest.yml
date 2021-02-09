@@ -34,8 +34,8 @@ jobs:
       #      ${{ runner.os }}-build-cache
     
       # Runs a set of commands using the runners shell
-      - name: Docker Compose Build
-        run: docker-compose build --build-arg MODE=test
+      #- name: Docker Compose Build
+      #  run: docker-compose build --build-arg MODE=test
       
       # Runs python tests
       - name: Set up Python 3.x
