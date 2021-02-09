@@ -3,7 +3,7 @@ FROM python:3.6.8-alpine3.9
 ENV GROUP_ID=1000 \
     USER_ID=1000
 
-ARG MODE
+ARG MODE="test"
 
 LABEL MAINTAINER="Dave Conroy <dconroy@gmail.com>"
 LABEL MAINTAINER="Josh Darnell <josh@kurotek.com>"
