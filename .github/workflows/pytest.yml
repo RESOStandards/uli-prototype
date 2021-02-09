@@ -27,11 +27,7 @@ jobs:
         
       # Runs a set of commands using the runners shell
       - name: Docker Compose Build
-        run: |
-          echo Building Test Environment!   
-          run: docker-compose up --build -d --build-arg MODE=test
-          
-        steps:
+        run: docker-compose up --build -d --build-arg MODE=test
       
       # Runs python tests
       - name: Set up Python 3.x
