@@ -24,10 +24,18 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+      
+      #- name: Cache Docker layers
+      #  uses: actions/cache@v2
+      #  with:
+      #    path: /tmp/.build-cache
+      #    key: ${{ runner.os }}-buildx-${{ github.sha }}
+      #    restore-keys: |
+      #      ${{ runner.os }}-build-cache
     
       # Runs a set of commands using the runners shell
-      - name: Docker Compose Build
-        run: docker-compose build --build-arg MODE=test
+      #- name: Docker Compose Build
+      #  run: docker-compose build --build-arg MODE=test
       
       # Runs python tests
       - name: Set up Python 3.x
@@ -40,5 +48,5 @@ jobs:
       - name: Run Python Tests
         run: | 
           python3 -m pip install --upgrade pip
-          python3 -m pip install pytest requests
+          python3 -m pip install pytest requests pytest-docker-compose
           python3 -m pytest
