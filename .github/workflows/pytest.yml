@@ -6,7 +6,7 @@ name: Test Flask App
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ issue-4-add-random-data-generator, issue-3-add-ci-cd-tests ]
+    branches: [ issue-4-add-random-data-generator ]
   pull_request:
     branches: [ main ]
 
