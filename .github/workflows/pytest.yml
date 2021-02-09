@@ -27,7 +27,7 @@ jobs:
         
       # Runs a set of commands using the runners shell
       - name: Docker Compose Build
-        run: docker-compose up --build -d --build-arg MODE=test
+        run: docker-compose build --build-arg MODE=test
       
       # Runs python tests
       - name: Set up Python 3.x
@@ -38,4 +38,4 @@ jobs:
          
       # You can test your matrix by printing the current Python version
       - name: Run Python Tests
-        run: python -mv pytest --use-running-containers
+        run: python -m -v pytest
