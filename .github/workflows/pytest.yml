@@ -31,5 +31,15 @@ jobs:
           echo Building Test Environment!   
           run: docker-compose up --build -d --build-arg MODE=test
           
-          echo Runing tests...
-          run: python3 -m pytest
+        steps:
+      
+      # Runs python tests
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          # Semantic version range syntax or exact version of a Python version
+          python-version: '3.x'
+         
+      # You can test your matrix by printing the current Python version
+      - name: Run Python Tests
+        run: python -mv pytest --use-running-containers
