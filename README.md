@@ -22,9 +22,9 @@ To register a user
     POST http://localhost/register 
     {
     "MemberNationalAssociationId": "084001677",
-    "MemberEmail": "SarahConnor@gmail.com",
-    "MemberFirstName": "Sarah",
-    "MemberLastName": "Connor",
+    "MemberEmail": "dconroy@gmail.com",
+    "MemberFirstName": "David",
+    "MemberLastName": "Conroy",
     "license_data": [
         {
         "agency": "NY",
@@ -59,9 +59,9 @@ To register a user
     {
         "data": [
             {
-                "MemberEmail": "s*********r@gmail.com",
-                "MemberFirstName": "Sarah",
-                "MemberLastName": "Connor",
+                "MemberEmail": "d*****y@gmail.com",
+                "MemberFirstName": "David",
+                "MemberLastName": "Conroy",
                 "license_data": [
                     {
                         "agency": "NY",
@@ -101,17 +101,17 @@ Sample POST to http://localhost/query
     {
         "MemberNationalAssociationId": "08400162342349", 
         "licenseNumber": "12354",
-        "MemberEmail": "sconnor82517@gmail.com",
-        "MemberFirstName" : "Sarah",
-        "MemberLastName" : "Connor"
+        "MemberEmail": "dconroy1234@gmail.com",
+        "MemberFirstName" : "David",
+        "MemberLastName" : "Conroy"
     }
 ## Sample Return - Single Match Found
     {
         "data": [
             {
-                "MemberEmail": "s*********r@gmail.com",
-                "MemberFirstName": "Sarah",
-                "MemberLastName": "Connor",
+                "MemberEmail": "d*****y@gmail.com",
+                "MemberFirstName": "David",
+                "MemberLastName": "Conroy",
                 "license_data": [
                     {
                         "agency": "NY",

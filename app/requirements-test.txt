@@ -4,3 +4,6 @@ requests==2.20.1
 python-dotenv==0.15.0
 pytest==6.2.2
 faker==6.0.0
+
+cryptography==3.1.1
+pytest-docker-compose==3.2.1
