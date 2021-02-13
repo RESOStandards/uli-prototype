@@ -1,5 +1,4 @@
-import json
-import random
+import json, bson, random
 from faker import Faker
 from controllers.mongo import db, request
 from controllers.utils import hide_MemberEmail, ordered, format_uli
@@ -54,58 +53,65 @@ def search_licensee(post_data):
     else:
         return data
 
+
+# First Name
+# Middle Name
+# Last Name
+# Full Name
+# Nick Name
+# License Number
+# License State
+# License Sub-Type (Agent, Managing Broker, etc. based on state law)
+# NRDS Number
+# Office Name
+# Office ID
+# Office Address  
 def search_licensee2(post_data):
   status_message = ""
   has_error = False
   has_match = False
+  uli = None
 
   MEMBER_NATIONAL_ASSOCIATION_ID = "MemberNationalAssociationId"
   MEMBER_FIRST_NAME =  "MemberFirstName"
   MEMBER_LAST_NAME =  "MemberLastName"
   LICENSE_DATA = "license_data"
 
-  #TODO: add model and paraeter deserializer
+  #TODO: add model and parameter deserializer
   member_national_association_id = post_data.get(MEMBER_NATIONAL_ASSOCIATION_ID, None)
   member_first_name = post_data.get(MEMBER_FIRST_NAME, None)
   member_last_name = post_data.get(MEMBER_LAST_NAME, None)
   license_data = post_data.get(LICENSE_DATA, [])
 
+  # try and match by NRDS first
   if member_national_association_id is not None:
-      licensees = db.registry.find({ MEMBER_NATIONAL_ASSOCIATION_ID: member_national_association_id })
-      if licensees.count() > 1:
+    licensees = db.registry.find({ MEMBER_NATIONAL_ASSOCIATION_ID: member_national_association_id })
+    if licensees.count() > 1:
+      has_error = True
+      status_message = 'ERROR: more than one record was found with the given ' + MEMBER_NATIONAL_ASSOCIATION_ID
+    elif licensees.count() == 1:
+      if member_first_name == licensees[0].get(MEMBER_FIRST_NAME) and member_last_name == licensees[0].get(MEMBER_LAST_NAME):
+        uli = licensees[0].get('_id')
+        status_message = 'Found match for ' + MEMBER_NATIONAL_ASSOCIATION_ID + '=' + member_national_association_id
+      else:
         has_error = True
-        status_message = 'ERROR: more than one record was found with the given ' + MEMBER_NATIONAL_ASSOCIATION_ID
-      elif licensees.count() == 1:
-        if member_first_name == licensees[0].get(MEMBER_FIRST_NAME) and member_last_name == licensees[0].get(MEMBER_LAST_NAME):
-          has_match = True
-          status_message = 'Found match for ' + MEMBER_NATIONAL_ASSOCIATION_ID + '=' + member_national_association_id
-          #TODO: return ULI in this case? 
-        else:
-          has_error = True
-          status_message = 'ERROR: identity information is not correct for the given ' + MEMBER_NATIONAL_ASSOCIATION_ID
+        status_message = 'ERROR: identity information is not correct for the given ' + MEMBER_NATIONAL_ASSOCIATION_ID
 
-
-	#• First Name
-	#• Middle Name
-	#• Last Name
-	#• Full Name
-	#• Nick Name
-	#• License Number
-	#• License State
-	#• License Sub-Type (Agent, Managing Broker, etc. based on state law)
-	#• NRDS Number
-	#• Office Name
-	#• Office ID
-	#• Office Address  
-
-  if not has_error and not has_match:
+  # if that doesn't yield results, match by license data and first + last name
+  if not has_error and uli is None:
     for licenses in license_data:
-      licenses = db.registry.find({LICENSE_DATA : license_data})
-      for licensee in licenses:
-        if member_first_name == licensee.get(MEMBER_FIRST_NAME) and member_last_name == licensee.get(MEMBER_LAST_NAME):
-          has_match = True
-              
-  return {'has_match': has_match, 'status_message' : status_message, 'has_error': has_error}
+      licenses = db.registry.find({ LICENSE_DATA : license_data, MEMBER_FIRST_NAME: member_first_name, MEMBER_LAST_NAME: member_last_name })
+      if licenses.count() == 1:
+        uli = licenses[0].get('_id')
+        status_message = 'Found match for ' + LICENSE_DATA + ', ' + MEMBER_FIRST_NAME + ', ' + MEMBER_LAST_NAME
+      elif licenses.count() > 1:
+        has_error = True
+        status_message = 'ERROR: more than one record was found with the given ' + LICENSE_DATA
+      else:
+        has_error = True
+        status_message = 'ERROR: identity information is not correct for the given ' + LICENSE_DATA
+  
+  return {'status_message' : status_message, 'has_error': has_error, 'uli': uli}
 
 
 #TODO: add parameter validation to the creation, no empty items allowed...
@@ -121,7 +127,26 @@ def create_licensee(post_data):
   uli = db.registry.insert_one(item).inserted_id
   return uli
 
+def remove_licensee(uli):
+  """Deletes a licensee with the given ULI"""
+  item = {
+      "_id": bson.ObjectId(oid=str(uli)),
+  }
+
+  count = db.registry.delete_one(item).deleted_count
+  return count
+
+def find_licensee(uli):
+  """Finds a licensee with the given ULI"""
+  item = {
+      "_id": bson.ObjectId(oid=str(uli)),
+  }
+
+  count = db.registry.count(item)
+  return count
+
 def generate_licensees(post_data):
+  """Generates random licensee data for NumLicensees records"""
   num = post_data["NumLicensees"] or 0
   fake = Faker()
 
@@ -144,5 +169,3 @@ def generate_licensees(post_data):
 
   return num
   
-
-
