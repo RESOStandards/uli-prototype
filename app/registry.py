@@ -113,15 +113,15 @@ def search_licensee2(post_data):
 
 #TODO: add parameter validation to the creation, no empty items allowed...
 # Perhaps we move the validation of these items to here so this method can't be accidentally called?
-def create_licensee(record):
-    member = Member(MemberNationalAssociationId=record['MemberNationalAssociationId'],
-                    MemberFirstName=record['MemberFirstName'],
-                    MemberLastName=record['MemberLastName'],
-                    MemberEmail=record['MemberEmail'],
-                    LicenseInfo=record['LicenseInfo']
-             )
-    member.save()
-    return (member.to_json())
+# def create_licensee(record):
+#     member = Member(MemberNationalAssociationId=record['MemberNationalAssociationId'],
+#                     MemberFirstName=record['MemberFirstName'],
+#                     MemberLastName=record['MemberLastName'],
+#                     MemberEmail=record['MemberEmail'],
+#                     LicenseInfo=record['LicenseInfo']
+#              )
+#     member.save()
+#     return (member.to_json())
 
 def generate_licensees(post_data):
   num = post_data["NumLicensees"] or 0
