@@ -66,7 +66,13 @@ def registerLicensee():
                   LicenseInfo=record['LicenseInfo']
           )
   result = search_licensee(member)
- 
+  
+  if result['has_error']:
+    return jsonify(
+      status=False,
+      message = result.get('status_message')
+    ), 201
+
   if result['has_match']:
       #We've found possible Licensees that match the registered data, return them
       return jsonify(
