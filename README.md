@@ -63,14 +63,19 @@ To register a user
 Sample POST to http://localhost/query
 
     {
-        "MemberNationalAssociationId": "084001677",
-        "MemberEmail": "dconroy@gmail.com",
-        "MemberFirstName": "David",
-        "MemberLastName": "Conroy",
+        "MemberNationalAssociationId": "hjRWlmDkIHlxvrcQTbYBSvmKvVRcBw2",
+        "MemberFirstName": "Tracy",
+        "MemberLastName": "Washington",
+        "MemberEmail": "william05@marquez.com",
         "LicenseInfo": [
             {
+                "agency": "SD",
+                "number": "7385311",
+                "type": "Broker"
+            },
+            {
                 "agency": "NY",
-                "number": "1234586",
+                "number": "8479311",
                 "type": "Broker"
             }
         ]
