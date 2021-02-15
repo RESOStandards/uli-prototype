@@ -1,11 +1,11 @@
-db.registry.insert(
+db.member.insert(
       [
         {
           "MemberNationalAssociationId": "084001678",
           "MemberEmail": "amanning@era.com",
           "MemberFirstName": "Andrea",
           "MemberLastName": "Manning",
-          "license_data": [
+          "LicenseInfo": [
               {
               "agency": "NY",
               "number": "584362",
@@ -30,14 +30,14 @@ db.registry.insert(
           }
       ]
    )
-db.registry.insert(
+db.member.insert(
     [
       {
         "MemberNationalAssociationId": "120843873",
         "MemberEmail": "jclarkson@remax.net",
         "MemberFirstName": "Joseph",
         "MemberLastName": "Clarkson",
-        "license_data": [
+        "LicenseInfo": [
             {
             "agency": "NY",
             "number": "4443245",
@@ -62,14 +62,14 @@ db.registry.insert(
         }
     ]
  )
- db.registry.insert(
+ db.member.insert(
   [
     {
       "MemberNationalAssociationId": "379414468",
       "MemberEmail": "zmorgan@remax.com",
       "MemberFirstName": "Zoe",
       "MemberLastName": "Morgan",
-      "license_data": [
+      "LicenseInfo": [
           {
           "agency": "NY",
           "number": "335525",

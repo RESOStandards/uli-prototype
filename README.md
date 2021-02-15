@@ -25,7 +25,7 @@ To register a user
     "MemberEmail": "dconroy@gmail.com",
     "MemberFirstName": "David",
     "MemberLastName": "Conroy",
-    "license_data": [
+    "LicenseInfo": [
         {
         "agency": "NY",
         "number": "1234586",
@@ -62,7 +62,7 @@ To register a user
                 "MemberEmail": "d*****y@gmail.com",
                 "MemberFirstName": "David",
                 "MemberLastName": "Conroy",
-                "license_data": [
+                "LicenseInfo": [
                     {
                         "agency": "NY",
                         "number": "1234586",
@@ -112,7 +112,7 @@ Sample POST to http://localhost/query
                 "MemberEmail": "d*****y@gmail.com",
                 "MemberFirstName": "David",
                 "MemberLastName": "Conroy",
-                "license_data": [
+                "LicenseInfo": [
                     {
                         "agency": "NY",
                         "number": "1234586",

@@ -24,7 +24,7 @@ def wait_for_api(function_scoped_container_getter):
 def test_successful_registration(wait_for_api):
   # TODO: add teardown that removes this record
   request_session, api_url = wait_for_api
-  data = '{ "MemberNationalAssociationId" : "hjRWlmDkIHlxvrcQTbYBSvmKvVRcBw", "MemberFirstName" : "Tracy", "MemberLastName" : "Washington", "MemberEmail" : "william05@marquez.com", "license_data" : [ { "agency" : "SD", "number" : "7385", "type" : "Broker" }, { "agency" : "NY", "number" : "8479", "type" : "Broker" }, { "agency" : "OH", "number" : "495", "type" : "Agent" } ] }'
+  data = '{ "MemberNationalAssociationId" : "hjRWlmDkIHlxvrcQTbYBSvmKvVRcBw", "MemberFirstName" : "Tracy", "MemberLastName" : "Washington", "MemberEmail" : "william05@marquez.com", "LicenseInfo" : [ { "agency" : "SD", "number" : "7385", "type" : "Broker" }, { "agency" : "NY", "number" : "8479", "type" : "Broker" }, { "agency" : "OH", "number" : "495", "type" : "Agent" } ] }'
   item = request_session.post('%s/register' % api_url, data = data).json()
   assert item['status'] == True
 
