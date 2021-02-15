@@ -50,51 +50,15 @@ To register a user
     }
 ## Sample Return - No Match Found, New User Created
     {
-        "ULI": "600c5b0d762ace88ef66f2ca",
         "message": "ULI saved successfully!",
-        "status": true
+        "status": true,
+        "uli": "602ac76cd790ab1c770cbbbf"
     }
 ## Sample Return - Potential Matches Found
-
-    {
-        "data": [
-            {
-                "MemberEmail": "d*****y@gmail.com",
-                "MemberFirstName": "David",
-                "MemberLastName": "Conroy",
-                "LicenseInfo": [
-                    {
-                        "agency": "NY",
-                        "number": "1234586",
-                        "type": "Broker"
-                    },
-                    {
-                        "agency": "NY",
-                        "number": "a12356ddd",
-                        "type": "Appraisal"
-                    },
-                    {
-                        "agency": "MA",
-                        "number": "78910",
-                        "type": "Salesperson"
-                    },
-                    {
-                        "agency": "NH",
-                        "number": "654321",
-                        "type": "Salesperson"
-                    }
-                ],
-                "MemberNationalAssociationId": "084001677",
-                "uli": "601032f9bd167f2a38b080bc"
-            },
-            {
-                "possible_matches:": 1
-            }
-        ],
-        "message": "ULI May Exist!",
-        "status": true
-    }
-
+{
+    "message": "ULI May Exist!",
+    "status": true
+}
 # Querying a User
 Sample POST to http://localhost/query
 
@@ -105,49 +69,11 @@ Sample POST to http://localhost/query
         "MemberFirstName" : "David",
         "MemberLastName" : "Conroy"
     }
-## Sample Return - Single Match Found
-    {
-        "data": [
-            {
-                "MemberEmail": "d*****y@gmail.com",
-                "MemberFirstName": "David",
-                "MemberLastName": "Conroy",
-                "LicenseInfo": [
-                    {
-                        "agency": "NY",
-                        "number": "1234586",
-                        "type": "Broker"
-                    },
-                    {
-                        "agency": "NY",
-                        "number": "a12356ddd",
-                        "type": "Appraiseral"
-                    },
-                    {
-                        "agency": "MA",
-                        "number": "78910",
-                        "type": "Salesperson"
-                    },
-                    {
-                        "agency": "NH",
-                        "number": "654321",
-                        "type": "Salesperson"
-                    }
-                ],
-                "MemberNationalAssociationId": "084001677",
-                "uli": "601032f9bd167f2a38b080bc"
-            },
-            {
-                "possible_matches:": 1
-            }
-        ],
-        "message": "ULI May Exist!",
-        "status": true
-    }
-
-## Sample Return - Multiple Matches Found
-TBC
-
+## Sample Return 
+{
+    "message": "ULI May Exist!",
+    "status": true
+}
 ## Outstanding Questions
 
 1) Is mongo the right technology for this? Will it scale to millions of users?
