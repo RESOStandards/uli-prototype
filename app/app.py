@@ -4,7 +4,7 @@ import os
 import settings
 import json
 from models import Member
-from registry import search_licensee, generate_licensees, create_licensee
+from registry import search_licensee, generate_licensees #, create_licensee
 from flask import Flask, request, jsonify
 from mongoengine import *
 

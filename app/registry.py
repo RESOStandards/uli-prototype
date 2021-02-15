@@ -11,11 +11,10 @@ from mongoengine import *
 # data matches, i.e. state, license number, and type
 def match_licenses(licensees, licenses_to_check):
     for licensee in licensees: #for each licensee 
-        for individual_license in licenses_to_check: # and every license provided in the search
-            for license_held in licensee["LicenseInfo"]:
-                if(ordered(individual_license) == ordered(license_held)): #order the json to make sure you get exact matches
-                    return licensee
-
+      for individual_license in licenses_to_check: # and every license provided in the search
+          for license_held in licensee["LicenseInfo"]:
+              if(ordered(individual_license) == ordered(license_held)): #order the json to make sure you get exact matches
+                  return licensee
 
 # TODO: this method will allow dupe records to be created with NRDS and distinct name parts...
 def search_licensee(member):
@@ -29,13 +28,10 @@ def search_licensee(member):
       if licensees.count() > 1:
         has_error = True
         status_message = 'ERROR: More than one record was found with the given MemberNationalAssociationId'
-        return {'has_match': has_match, 'status_message' : status_message, 'has_error': has_error}
-      elif licensees.count() == 1:
+       elif licensees.count() == 1:
           if(member.MemberFirstName == licensees[0]["MemberFirstName"] and member.MemberLastName == licensees[0]["MemberLastName"]):
             has_match = True
             status_message = 'Found match!'
-            return {'has_match': has_match, 'status_message' : status_message, 'has_error': has_error}
-
 
   if not has_error and not has_match:
     #temp store licensees that are matched by license data
@@ -52,9 +48,10 @@ def search_licensee(member):
     #check every license submitted against every license held by people with same first and last name
     matched_by_license = match_licenses(_licensees, licenses_to_check)
     if matched_by_license is not None:
-      return {'has_match': True, 'status_message' : 'Found match!', 'has_error': False}
+      has_match = True
+      status_message = 'Found match!'
               
-  return {'has_match': False, 'status_message' : 'ULI Not Found!', 'has_error': False}
+  return {'has_match': has_match, 'status_message' : status_message, 'has_error': has_error}
 
 
 def search_licensee2(post_data):
