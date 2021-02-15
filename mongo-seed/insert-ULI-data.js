@@ -26,7 +26,8 @@ db.member.insert(
               "number": "S87896",
               "type": "Salesperson"
               }
-          ]
+          ],
+          "date_created": new Date()
           }
       ]
    )
@@ -58,7 +59,8 @@ db.member.insert(
             "number": "055632",
             "type": "Salesperson"
             }
-        ]
+        ],
+        "date_created": new Date()
         }
     ]
  )
@@ -90,8 +92,9 @@ db.member.insert(
           "number": "3365458",
           "type": "Salesperson"
           }
-      ]
-      }
+        ],
+        "date_created": new Date()
+        }
   ]
 )
 
