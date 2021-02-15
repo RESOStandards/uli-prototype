@@ -56,6 +56,9 @@ def licensee():
 @app.route('/register', methods=['POST'])
 def registerLicensee():
   record = json.loads(request.data)
+  if record.get('LicenseInfo') is None:
+     record['LicenseInfo'] = ""
+  
   member = Member(MemberNationalAssociationId=record['MemberNationalAssociationId'],
                   MemberFirstName=record['MemberFirstName'],
                   MemberLastName=record['MemberLastName'],
