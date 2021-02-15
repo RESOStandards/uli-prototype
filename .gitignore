@@ -131,3 +131,7 @@ dmypy.json
 *.swp
 *.swn
 *.swo
+
+#vs code settings
+workspace.code-workspace
+.DS_Store
