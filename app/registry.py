@@ -19,28 +19,40 @@ def match_licenses(licensees, licenses_to_check):
 
 # TODO: this method will allow dupe records to be created with NRDS and distinct name parts...
 def search_licensee(member):
+  status_message = ""
+  has_error = False
+  has_match = False
+
   #check MemberNationalAssociationId, and if matches, confirm first name last name match
   if member.MemberNationalAssociationId is not None:
-      stored_licensees = Member.objects(MemberNationalAssociationId=member.MemberNationalAssociationId)
-      for licensee in stored_licensees:
-          if(member.MemberFirstName == licensee["MemberFirstName"] and member.MemberLastName == licensee["MemberLastName"]):
-              return {'has_match': True, 'status_message' : 'Found match!', 'has_error': False}
+      licensees = Member.objects(MemberNationalAssociationId=member.MemberNationalAssociationId)
+      if licensees.count() > 1:
+        has_error = True
+        status_message = 'ERROR: More than one record was found with the given MemberNationalAssociationId'
+        return {'has_match': has_match, 'status_message' : status_message, 'has_error': has_error}
+      elif licensees.count() == 1:
+          if(member.MemberFirstName == licensees[0]["MemberFirstName"] and member.MemberLastName == licensees[0]["MemberLastName"]):
+            has_match = True
+            status_message = 'Found match!'
+            return {'has_match': has_match, 'status_message' : status_message, 'has_error': has_error}
 
-  #temp store licensees that are matched by license data
-  matched_by_license = [] 
 
-  #get the licenses provided by the search for comparison against licenses held by people with same first and last name
-  #TODO: is license data ever passed with a search? 
-  licenses_to_check = member.LicenseInfo
+  if not has_error and not has_match:
+    #temp store licensees that are matched by license data
+    matched_by_license = [] 
 
-  #pull users with matching first/last using query sets
-  _licensees = Member.objects.filter(Q(MemberFirstName=member.MemberFirstName) & 
-                                      Q(MemberLastName=member.MemberLastName))
-  
-  #check every license submitted against every license held by people with same first and last name
-  matched_by_license = match_licenses(_licensees, licenses_to_check)
-  if matched_by_license is not None:
-    return {'has_match': True, 'status_message' : 'Found match!', 'has_error': False}
+    #get the licenses provided by the search for comparison against licenses held by people with same first and last name
+    #TODO: is license data ever passed with a search? 
+    licenses_to_check = member.LicenseInfo
+
+    #pull users with matching first/last using query sets
+    _licensees = Member.objects.filter(Q(MemberFirstName=member.MemberFirstName) & 
+                                        Q(MemberLastName=member.MemberLastName))
+    
+    #check every license submitted against every license held by people with same first and last name
+    matched_by_license = match_licenses(_licensees, licenses_to_check)
+    if matched_by_license is not None:
+      return {'has_match': True, 'status_message' : 'Found match!', 'has_error': False}
               
   return {'has_match': False, 'status_message' : 'ULI Not Found!', 'has_error': False}
 
@@ -55,7 +67,7 @@ def search_licensee2(post_data):
   MEMBER_LAST_NAME =  "MemberLastName"
   LicenseInfo = "LicenseInfo"
 
-  #TODO: add model and paraeter deserializer
+  #TODO: add model and parameter deserializer
   member_national_association_id = post_data.get(MEMBER_NATIONAL_ASSOCIATION_ID, None)
   member_first_name = post_data.get(MEMBER_FIRST_NAME, None)
   member_last_name = post_data.get(MEMBER_LAST_NAME, None)
