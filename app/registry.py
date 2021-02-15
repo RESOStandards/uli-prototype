@@ -28,7 +28,7 @@ def search_licensee(member):
       if licensees.count() > 1:
         has_error = True
         status_message = 'ERROR: More than one record was found with the given MemberNationalAssociationId'
-       elif licensees.count() == 1:
+      elif licensees.count() == 1:
           if(member.MemberFirstName == licensees[0]["MemberFirstName"] and member.MemberLastName == licensees[0]["MemberLastName"]):
             has_match = True
             status_message = 'Found match!'
