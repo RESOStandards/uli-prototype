@@ -22,9 +22,9 @@ To register a user
     POST http://localhost/register 
     {
     "MemberNationalAssociationId": "084001677",
-    "MemberEmail": "dconroy@gmail.com",
-    "MemberFirstName": "David",
-    "MemberLastName": "Conroy",
+    "MemberEmail": "SarahConnor@gmail.com",
+    "MemberFirstName": "Sarah",
+    "MemberLastName": "Connor",
     "LicenseInfo": [
         {
         "agency": "NY",
@@ -55,32 +55,47 @@ To register a user
         "uli": "602ac76cd790ab1c770cbbbf"
     }
 ## Sample Return - Potential Matches Found
-{
-    "message": "ULI May Exist!",
-    "status": true
-}
+    {
+        "message": "ULI May Exist!",
+        "status": true
+    }
 # Querying a User
 Sample POST to http://localhost/query
 
     {
-        "MemberNationalAssociationId": "08400162342349", 
-        "licenseNumber": "12354",
-        "MemberEmail": "dconroy1234@gmail.com",
-        "MemberFirstName" : "David",
-        "MemberLastName" : "Conroy"
+        "MemberNationalAssociationId": "084001677",
+        "MemberEmail": "dconroy@gmail.com",
+        "MemberFirstName": "David",
+        "MemberLastName": "Conroy",
+        "LicenseInfo": [
+            {
+                "agency": "NY",
+                "number": "1234586",
+                "type": "Broker"
+            }
+        ]
     }
-## Sample Return 
-{
-    "message": "ULI May Exist!",
-    "status": true
-}
+## Sample Return - Match Found
+    {
+        "message": "ULI May Exist!",
+        "status": true
+    }
+
+## Sample Return - No Match Found
+    {
+        "message": "ULI Not Found!",
+        "status": true
+    }
+
+## Generate Test Data 
+Sample POST to http://localhost/generate_licensees
+
+    {
+        "NumLicensees": 100000
+    }
 ## Outstanding Questions
 
 1) Is mongo the right technology for this? Will it scale to millions of users?
-2) Can the matching be improved? Right now only doing MemberEmail, or combination of first and last name. How can we ensure millisecond response time on multiple search types on a NOSQL collection? Elastic Search?
-3) Do I need to nest the license information like the DID spec?
-4) How do we avoid leaking data?
-   1) Do we need to obsfucate license numbers? 
-   2) MemberNationalAssociationId?
-   3) Names?
-5) Do we need to deploy this?
+2) Can the matching be improved? 
+3) How do we avoid leaking data?
+4) Do we need to deploy this?
