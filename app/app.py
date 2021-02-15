@@ -20,8 +20,19 @@ def index():
 
 @app.route('/query', methods=['POST'])
 def licensee():
-  post_data = request.get_json(force=True)
-  result = search_licensee2(post_data)
+  record = json.loads(request.data)
+  #license info optional
+  if record.get('LicenseInfo') is None:
+     record['LicenseInfo'] = ""
+
+  member = Member(MemberNationalAssociationId=record['MemberNationalAssociationId'],
+                  MemberFirstName=record['MemberFirstName'],
+                  MemberLastName=record['MemberLastName'],
+                  MemberEmail=record['MemberEmail'],
+                  LicenseInfo=record['LicenseInfo']
+          )
+          
+  result = search_licensee(member)
 
   if result['has_error']:
     return jsonify(
@@ -68,11 +79,6 @@ def registerLicensee():
           uli=str(ULI.id), 
           message='ULI saved successfully!'
       ), 201
-
-  return jsonify(
-          status=True,
-          message='Unexpected Error!'
-      ), 500
 
 
 @app.route('/generate_licensees', methods=['POST'])
