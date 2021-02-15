@@ -109,11 +109,7 @@ def create_licensee(record):
                     LicenseInfo=record['LicenseInfo']
              )
     member.save()
-    #print(member.to_json())
     return (member.to_json())
-
-    #uli = db.registry.insert_one(member).inserted_id
-    #return uli
 
 def generate_licensees(post_data):
   num = post_data["NumLicensees"] or 0
