@@ -2,9 +2,9 @@ from mongoengine import *
 import datetime
 class Member(Document):
     MemberNationalAssociationId = StringField()
-    MemberFirstName = StringField()
-    MemberLastName = StringField()
-    MemberEmail = StringField()
+    MemberFirstName = StringField(required=True)
+    MemberLastName = StringField(required=True)
+    MemberEmail = StringField(required=True)
     LicenseInfo = ListField()
     date_created = DateTimeField(default=datetime.datetime.utcnow)
 
