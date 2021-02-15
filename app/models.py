@@ -1,6 +1,5 @@
 from mongoengine import *
 import datetime
-
 class Member(Document):
     MemberNationalAssociationId = StringField()
     MemberFirstName = StringField()

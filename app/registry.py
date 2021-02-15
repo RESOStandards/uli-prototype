@@ -42,7 +42,7 @@ def search_licensee(member):
   if matched_by_license is not None:
     return {'has_match': True, 'status_message' : 'Found match!', 'has_error': False}
               
-  return {'has_match': False, 'status_message' : 'Found match!', 'has_error': False}
+  return {'has_match': False, 'status_message' : 'ULI Not Found!', 'has_error': False}
 
 
 def search_licensee2(post_data):
