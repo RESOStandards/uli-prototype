@@ -154,9 +154,9 @@ def removeLicensee():
         message='uli is required when making this request!'
     ), 400
 
-  count = remove_licensee(uli)
+  licensee = remove_licensee(uli)
 
-  if count == 1:
+  if licensee:
     return jsonify(
         status=True,
         message='uli: ' + uli + ' deleted!'

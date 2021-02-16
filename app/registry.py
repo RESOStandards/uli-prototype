@@ -5,7 +5,7 @@ from utils import ordered
 from models import Member
 from flask import jsonify
 import mongoengine
-
+from mongoengine import *
 
 # TODO: not sure whether this would work in production because the nested licensees would likely
 # have different key or modification timestamp fields but would be the same if their defining license
@@ -109,11 +109,10 @@ def remove_licensee(uli):
   """Deletes a licensee with the given ULI"""
   try:
     member = Member.objects.get(id=uli).delete()
-    
   except Member.DoesNotExist:
-    count = None
+    member = None
   except mongoengine.errors.ValidationError:
-    count = None
+    member = None
   
   return member
 
