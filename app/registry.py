@@ -4,7 +4,8 @@ from faker import Faker
 from utils import ordered
 from models import Member
 from flask import jsonify
-from mongoengine import *
+import mongoengine
+
 
 # TODO: not sure whether this would work in production because the nested licensees would likely
 # have different key or modification timestamp fields but would be the same if their defining license
@@ -21,6 +22,7 @@ def search_licensee(member):
   status_message = ""
   has_error = False
   has_match = False
+  uli = None
 
   #check MemberNationalAssociationId, and if matches, confirm first name last name match
   if member.MemberNationalAssociationId is not None:
@@ -32,6 +34,7 @@ def search_licensee(member):
           if(member.MemberFirstName == licensees[0]["MemberFirstName"] and member.MemberLastName == licensees[0]["MemberLastName"]):
             has_match = True
             status_message = 'Found match!'
+            uli = str(licensees[0].id)
 
   if not has_error and not has_match:
     #temp store licensees that are matched by license data
@@ -50,80 +53,85 @@ def search_licensee(member):
     if matched_by_license is not None:
       has_match = True
       status_message = 'Found match!'
+      uli = str(matched_by_license.id)
               
-  return {'has_match': has_match, 'status_message' : status_message, 'has_error': has_error}
+  return {'has_match': has_match, 'status_message' : status_message, 'has_error': has_error, 'uli': uli}
 
 
 def search_licensee2(post_data):
   status_message = ""
   has_error = False
   has_match = False
+  uli = None
 
   MEMBER_NATIONAL_ASSOCIATION_ID = "MemberNationalAssociationId"
   MEMBER_FIRST_NAME =  "MemberFirstName"
   MEMBER_LAST_NAME =  "MemberLastName"
-  LicenseInfo = "LicenseInfo"
+  LICENSE_DATA = "license_data"
 
   #TODO: add model and parameter deserializer
   member_national_association_id = post_data.get(MEMBER_NATIONAL_ASSOCIATION_ID, None)
   member_first_name = post_data.get(MEMBER_FIRST_NAME, None)
   member_last_name = post_data.get(MEMBER_LAST_NAME, None)
-  LicenseInfo = post_data.get(LicenseInfo, [])
+  license_data = post_data.get(LICENSE_DATA, [])
 
+  # try and match by NRDS first
   if member_national_association_id is not None:
-      licensees = db.registry.find({ MEMBER_NATIONAL_ASSOCIATION_ID: member_national_association_id })
-      if licensees.count() > 1:
+    licensees = db.registry.find({ MEMBER_NATIONAL_ASSOCIATION_ID: member_national_association_id })
+    if licensees.count() > 1:
+      has_error = True
+      status_message = 'ERROR: more than one record was found with the given ' + MEMBER_NATIONAL_ASSOCIATION_ID
+    elif licensees.count() == 1:
+      if member_first_name == licensees[0].get(MEMBER_FIRST_NAME) and member_last_name == licensees[0].get(MEMBER_LAST_NAME):
+        uli = licensees[0].get('_id')
+        status_message = 'Found match for ' + MEMBER_NATIONAL_ASSOCIATION_ID + '=' + member_national_association_id
+      else:
         has_error = True
-        status_message = 'ERROR: more than one record was found with the given ' + MEMBER_NATIONAL_ASSOCIATION_ID
-      elif licensees.count() == 1:
-        if member_first_name == licensees[0].get(MEMBER_FIRST_NAME) and member_last_name == licensees[0].get(MEMBER_LAST_NAME):
-          has_match = True
-          status_message = 'Found match for ' + MEMBER_NATIONAL_ASSOCIATION_ID + '=' + member_national_association_id
-          #TODO: return ULI in this case? 
-        else:
-          has_error = True
-          status_message = 'ERROR: identity information is not correct for the given ' + MEMBER_NATIONAL_ASSOCIATION_ID
+        status_message = 'ERROR: identity information is not correct for the given ' + MEMBER_NATIONAL_ASSOCIATION_ID
 
+  # if that doesn't yield results, match by license data and first + last name
+  if not has_error and uli is None:
+    for licenses in license_data:
+      licenses = db.registry.find({ LICENSE_DATA : license_data, MEMBER_FIRST_NAME: member_first_name, MEMBER_LAST_NAME: member_last_name })
+      if licenses.count() == 1:
+        uli = licenses[0].get('_id')
+        status_message = 'Found match for ' + LICENSE_DATA + ', ' + MEMBER_FIRST_NAME + ', ' + MEMBER_LAST_NAME
+      elif licenses.count() > 1:
+        has_error = True
+        status_message = 'ERROR: more than one record was found with the given ' + LICENSE_DATA
+      else:
+        has_error = True
+        status_message = 'ERROR: identity information is not correct for the given ' + LICENSE_DATA
+  
+  return {'status_message' : status_message, 'has_error': has_error, 'uli': uli}
 
-	#• First Name
-	#• Middle Name
-	#• Last Name
-	#• Full Name
-	#• Nick Name
-	#• License Number
-	#• License State
-	#• License Sub-Type (Agent, Managing Broker, etc. based on state law)
-	#• NRDS Number
-	#• Office Name
-	#• Office ID
-	#• Office Address  
+def remove_licensee(uli):
+  """Deletes a licensee with the given ULI"""
+  try:
+    member = Member.objects.get(id=uli).delete()
+    
+  except Member.DoesNotExist:
+    count = None
+  except mongoengine.errors.ValidationError:
+    count = None
+  
+  return member
 
-  if not has_error and not has_match:
-    for licenses in LicenseInfo:
-      licenses = db.registry.find({LicenseInfo : LicenseInfo})
-      for licensee in licenses:
-        if member_first_name == licensee.get(MEMBER_FIRST_NAME) and member_last_name == licensee.get(MEMBER_LAST_NAME):
-          has_match = True
-              
-  return {'has_match': has_match, 'status_message' : status_message, 'has_error': has_error}
+def find_licensee(uli):
+  """Finds a licensee with the given ULI"""
+  try:
+    count = Member.objects.get(id=uli)
+  except Member.DoesNotExist:
+    count = None
+  except mongoengine.errors.ValidationError:
+    count = None
 
-
-#TODO: add parameter validation to the creation, no empty items allowed...
-# Perhaps we move the validation of these items to here so this method can't be accidentally called?
-# def create_licensee(record):
-#     member = Member(MemberNationalAssociationId=record['MemberNationalAssociationId'],
-#                     MemberFirstName=record['MemberFirstName'],
-#                     MemberLastName=record['MemberLastName'],
-#                     MemberEmail=record['MemberEmail'],
-#                     LicenseInfo=record['LicenseInfo']
-#              )
-#     member.save()
-#     return (member.to_json())
+  return count
 
 def generate_licensees(post_data):
   num = post_data["NumLicensees"] or 0
   fake = Faker()
-  types = ["Broker", "Agent", "Salesperson"]
+  types = ["Broker", "Agent", "Salesperson", "Appraiser"]
 
   for _ in range(num):
     member = Member(MemberNationalAssociationId=fake.pystr(30, 30),
@@ -139,3 +147,4 @@ def generate_licensees(post_data):
     member.save()
 
   return num
+

@@ -56,7 +56,7 @@ To register a user
     }
 ## Sample Return - Potential Matches Found
     {
-        "message": "ULI May Exist!",
+        "message": "Found ULI!",
         "status": true
     }
 # Querying a User
@@ -82,7 +82,7 @@ Sample POST to http://localhost/query
     }
 ## Sample Return - Match Found
     {
-        "message": "ULI May Exist!",
+        "message": "Found ULI!",
         "status": true
     }
 

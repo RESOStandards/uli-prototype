@@ -4,7 +4,7 @@ import os
 import settings
 import json
 from models import Member
-from registry import search_licensee, generate_licensees #, create_licensee
+from registry import search_licensee, generate_licensees, find_licensee, remove_licensee
 from flask import Flask, request, jsonify
 from mongoengine import *
 
@@ -40,17 +40,17 @@ def licensee():
       message = result.get('status_message')
     ), 201
     
-  uli = result['uli']
-  if uli is not None:
+  if result['has_match']:
     return jsonify(
       status=True,
       message = result.get('status', 'Found ULI!'),
-      uli = str(uli)
+      uli = result.get('uli')
     ), 201
 
   return jsonify(
     status=True,
-    message='ULI Not Found!'
+    message='ULI Not Found!',
+    uli = result.get('uli')
   ), 404
 
 @app.route('/register', methods=['POST'])
@@ -70,7 +70,8 @@ def registerLicensee():
   if result['has_error']:
     return jsonify(
       status=False,
-      message = result.get('status_message')
+      message = result.get('status_message'),
+      uli = result.get('uli')
     ), 201
 
   if result['has_match']:
@@ -78,7 +79,7 @@ def registerLicensee():
       return jsonify(
           status=True,
           message = result.get('status', "Found ULI!"),
-          uli = str(uli)
+          uli = result.get('uli')
       ), 201
       
   else:
@@ -100,7 +101,7 @@ def generateLicensees():
 ### ADMIN METHODS ###
 API_KEY = '_admin_token' #TODO: add real admin tokens
 
-@application.route('/find_licensee', methods=['POST'])
+@app.route('/find_licensee', methods=['POST'])
 def getLicensee():
   """This method fetches ULIs by Id"""
   post_data = request.get_json(force=True)
@@ -121,7 +122,7 @@ def getLicensee():
 
   count = find_licensee(uli)
 
-  if count == 1:
+  if count:
     return jsonify(
         status=True,
         message='ULI found!',
@@ -133,7 +134,7 @@ def getLicensee():
         message='uli: ' + uli + ' not found!'
     ), 404
   
-@application.route('/remove_licensee', methods=['DELETE'])
+@app.route('/remove_licensee', methods=['DELETE'])
 def removeLicensee():
   """This method is primarily used for testing purposes and requires a token"""
   post_data = request.get_json(force=True)
