@@ -4,7 +4,6 @@ from faker import Faker
 from utils import ordered
 from models import Member
 from flask import jsonify
-import mongoengine
 from mongoengine import *
 
 # TODO: not sure whether this would work in production because the nested licensees would likely
@@ -109,20 +108,17 @@ def remove_licensee(uli):
   """Deletes a licensee with the given ULI"""
   try:
     member = Member.objects.get(id=uli).delete()
-  except Member.DoesNotExist:
-    member = None
-  except mongoengine.errors.ValidationError:
-    member = None
-  
-  return member
+    return True
+  except:
+    pass
+
+  return False
 
 def find_licensee(uli):
   """Finds a licensee with the given ULI"""
   try:
     count = Member.objects.get(id=uli)
-  except Member.DoesNotExist:
-    count = None
-  except mongoengine.errors.ValidationError:
+  except:
     count = None
 
   return count
