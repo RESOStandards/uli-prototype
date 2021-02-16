@@ -7,6 +7,13 @@ from requests.adapters import HTTPAdapter
 
 pytest_plugins = ["docker_compose"]
 
+FAKE_TESTING_ID = 'fakey-fake-id'
+FAKE_TESTING_RECORD = '{ "UniqueLicenseeIdentifier": "%s", "MemberNationalAssociationId" : "%s", "MemberFirstName" : "Fakey", "MemberLastName" : "Fake", "MemberEmail" : "fakey@fake.com", "license_data" : [ { "agency" : "HI", "number" : "fake", "type" : "Broker" }, { "agency" : "AZ", "number" : "fake", "type" : "Broker" }, { "agency" : "OH", "number" : "fake", "type" : "Agent" } ] }' % (FAKE_TESTING_ID, FAKE_TESTING_ID)
+FAKE_ADMIN_TOKEN = '_admin_token' #TODO: add real admin tokens
+ULI_FOUND_MESSAGE = 'Unique Licensee Identifier: %s found!'
+
+__ULI__ = None
+
 # Invoking this fixture: 'function_scoped_container_getter' starts all services
 @pytest.fixture(scope="function")
 def wait_for_api(function_scoped_container_getter):
@@ -20,27 +27,29 @@ def wait_for_api(function_scoped_container_getter):
   api_url = "http://%s/" % (service.hostname)
   assert request_session.get(api_url)
   return request_session, api_url
-
+  
 def test_successful_registration(wait_for_api):
   # TODO: add teardown that removes this record
   request_session, api_url = wait_for_api
-  data = '{ "MemberNationalAssociationId" : "hjRWlmDkIHlxvrcQTbYBSvmKvVRcBw", "MemberFirstName" : "Tracy", "MemberLastName" : "Washington", "MemberEmail" : "william05@marquez.com", "license_data" : [ { "agency" : "SD", "number" : "7385", "type" : "Broker" }, { "agency" : "NY", "number" : "8479", "type" : "Broker" }, { "agency" : "OH", "number" : "495", "type" : "Agent" } ] }'
-  item = request_session.post('%s/register' % api_url, data = data).json()
-  assert item['status'] == True
+  item = request_session.post('%s/register' % api_url, data = FAKE_TESTING_RECORD).json()
+  global __ULI__
+  __ULI__ = item['uli']
+
+  #ensure that record was inserted
+  inserted = request_session.post('%s/find_licensee' % api_url, data = '{"token": "%s", "uli": "%s"}' % (FAKE_ADMIN_TOKEN, __ULI__)).json() 
+  assert inserted['uli'] == __ULI__
 
 def test_successful_query(wait_for_api):
   request_session, api_url = wait_for_api
-  data = '{ "MemberNationalAssociationId" : "hjRWlmDkIHlxvrcQTbYBSvmKvVRcBw", "MemberFirstName" : "Tracy", "MemberLastName" : "Washington", "MemberEmail" : "william05@marquez.com"}'
-  item = request_session.post('%s/query' % api_url, data = data).json()
+  item = request_session.post('%s/query' % api_url, data = FAKE_TESTING_RECORD).json()
+  assert item['uli'] == __ULI__
+  assert item['message'] == 'Found ULI!'
 
-  assert item == json.loads('{"message": "ULI May Exist!", "status": true}')
+def test_remove_licensee(wait_for_api):
+  request_session, api_url = wait_for_api
+  item = request_session.delete('%s/remove_licensee' % api_url, data = '{"token": "%s", "uli": "%s"}' % (FAKE_ADMIN_TOKEN, __ULI__)).json()
+  assert item['message'] == 'uli: ' + __ULI__ + ' deleted!'
 
-#def test_duplicate_association_id(wait_for_api):
-  #time curl -d '{"MemberNationalAssociationId": "rKwpWBNFJNZFOAvPmYYgwDxoehlvfE","MemberEmail": "jenkinsvictoria@gmail.com","MemberFirstName": "Richard","MemberLastName": "Washington"}' -X POST http://localhost/query
-  #{
-  #  "message": "ERROR: more than one record was found with the given MemberNationalAssociationId", 
-  #  "status": false
- #}
-
-
+  inserted = request_session.post('%s/find_licensee' % api_url, data = '{"token": "%s", "uli": "%s"}' % (FAKE_ADMIN_TOKEN, __ULI__)).json() 
+  assert inserted['message'] == 'uli: ' + __ULI__ + ' not found!'
 

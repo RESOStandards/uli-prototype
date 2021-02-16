@@ -96,7 +96,8 @@ def getLicensee():
   if count == 1:
     return jsonify(
         status=True,
-        message='uli: ' + uli + ' found!'
+        message='ULI found!',
+        uli=uli
     ), 200
   else:
     return jsonify(
