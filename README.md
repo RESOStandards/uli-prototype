@@ -22,10 +22,10 @@ To register a user
     POST http://localhost/register 
     {
     "MemberNationalAssociationId": "084001677",
-    "MemberEmail": "dconroy@gmail.com",
-    "MemberFirstName": "David",
-    "MemberLastName": "Conroy",
-    "license_data": [
+    "MemberEmail": "SarahConnor@gmail.com",
+    "MemberFirstName": "Sarah",
+    "MemberLastName": "Connor",
+    "LicenseInfo": [
         {
         "agency": "NY",
         "number": "1234586",
@@ -50,111 +50,57 @@ To register a user
     }
 ## Sample Return - No Match Found, New User Created
     {
-        "ULI": "600c5b0d762ace88ef66f2ca",
         "message": "ULI saved successfully!",
-        "status": true
+        "status": true,
+        "uli": "602ac76cd790ab1c770cbbbf"
     }
 ## Sample Return - Potential Matches Found
-
     {
-        "data": [
-            {
-                "MemberEmail": "d*****y@gmail.com",
-                "MemberFirstName": "David",
-                "MemberLastName": "Conroy",
-                "license_data": [
-                    {
-                        "agency": "NY",
-                        "number": "1234586",
-                        "type": "Broker"
-                    },
-                    {
-                        "agency": "NY",
-                        "number": "a12356ddd",
-                        "type": "Appraisal"
-                    },
-                    {
-                        "agency": "MA",
-                        "number": "78910",
-                        "type": "Salesperson"
-                    },
-                    {
-                        "agency": "NH",
-                        "number": "654321",
-                        "type": "Salesperson"
-                    }
-                ],
-                "MemberNationalAssociationId": "084001677",
-                "uli": "601032f9bd167f2a38b080bc"
-            },
-            {
-                "possible_matches:": 1
-            }
-        ],
         "message": "ULI May Exist!",
         "status": true
     }
-
 # Querying a User
 Sample POST to http://localhost/query
 
     {
-        "MemberNationalAssociationId": "08400162342349", 
-        "licenseNumber": "12354",
-        "MemberEmail": "dconroy1234@gmail.com",
-        "MemberFirstName" : "David",
-        "MemberLastName" : "Conroy"
-    }
-## Sample Return - Single Match Found
-    {
-        "data": [
+        "MemberNationalAssociationId": "hjRWlmDkIHlxvrcQTbYBSvmKvVRcBw2",
+        "MemberFirstName": "Tracy",
+        "MemberLastName": "Washington",
+        "MemberEmail": "william05@marquez.com",
+        "LicenseInfo": [
             {
-                "MemberEmail": "d*****y@gmail.com",
-                "MemberFirstName": "David",
-                "MemberLastName": "Conroy",
-                "license_data": [
-                    {
-                        "agency": "NY",
-                        "number": "1234586",
-                        "type": "Broker"
-                    },
-                    {
-                        "agency": "NY",
-                        "number": "a12356ddd",
-                        "type": "Appraiseral"
-                    },
-                    {
-                        "agency": "MA",
-                        "number": "78910",
-                        "type": "Salesperson"
-                    },
-                    {
-                        "agency": "NH",
-                        "number": "654321",
-                        "type": "Salesperson"
-                    }
-                ],
-                "MemberNationalAssociationId": "084001677",
-                "uli": "601032f9bd167f2a38b080bc"
+                "agency": "SD",
+                "number": "7385311",
+                "type": "Broker"
             },
             {
-                "possible_matches:": 1
+                "agency": "NY",
+                "number": "8479311",
+                "type": "Broker"
             }
-        ],
+        ]
+    }
+## Sample Return - Match Found
+    {
         "message": "ULI May Exist!",
         "status": true
     }
 
-## Sample Return - Multiple Matches Found
-TBC
+## Sample Return - No Match Found
+    {
+        "message": "ULI Not Found!",
+        "status": true
+    }
 
+## Generate Test Data 
+Sample POST to http://localhost/generate_licensees
+
+    {
+        "NumLicensees": 100000
+    }
 ## Outstanding Questions
 
 1) Is mongo the right technology for this? Will it scale to millions of users?
-2) Can the matching be improved? Right now only doing MemberEmail, or combination of first and last name. How can we ensure millisecond response time on multiple search types on a NOSQL collection? Elastic Search?
-3) Do I need to nest the license information like the DID spec?
-4) How do we avoid leaking data?
-   1) Do we need to obsfucate license numbers? 
-   2) MemberNationalAssociationId?
-   3) Names?
-5) Do we need to deploy this?
+2) Can the matching be improved? 
+3) How do we avoid leaking data?
+4) Do we need to deploy this?

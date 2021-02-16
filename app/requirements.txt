@@ -4,3 +4,4 @@ requests==2.20.1
 python-dotenv==0.15.0
 pytest==6.2.2
 faker==6.0.0
+mongoengine==0.22.1

@@ -7,7 +7,7 @@ def format_uli(licensee):
         "MemberEmail": hide_MemberEmail(licensee["MemberEmail"]),
         "MemberFirstName": licensee["MemberFirstName"],
         "MemberLastName": licensee["MemberLastName"],
-        "license_data": licensee["license_data"],
+        "LicenseInfo": licensee["LicenseInfo"],
         "MemberNationalAssociationId": licensee["MemberNationalAssociationId"]
     }
     return item

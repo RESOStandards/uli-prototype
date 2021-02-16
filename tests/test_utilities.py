@@ -1,6 +1,6 @@
 import pytest
 import json
-from app.controllers.utils import format_uli, hide_MemberEmail, ordered
+from app.utils import format_uli, hide_MemberEmail, ordered
 
 def test_format_uli():
   licensee = dict(
@@ -8,11 +8,11 @@ def test_format_uli():
     MemberEmail="test@email.com", 
     MemberFirstName="jane", 
     MemberLastName="doe",
-    license_data=[],
+    LicenseInfo=[],
     MemberNationalAssociationId="abc"
   )
   
-  assert format_uli(licensee) == json.loads('{"uli":"123","MemberEmail":"t**t@email.com","MemberFirstName":"jane","MemberLastName":"doe","license_data":[],"MemberNationalAssociationId":"abc"}')
+  assert format_uli(licensee) == json.loads('{"uli":"123","MemberEmail":"t**t@email.com","MemberFirstName":"jane","MemberLastName":"doe","LicenseInfo":[],"MemberNationalAssociationId":"abc"}')
 
 def test_hide_MemberEmail():
   email = "ohai@email.com"
