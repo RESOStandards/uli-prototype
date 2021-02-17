@@ -123,8 +123,8 @@ def find_licensee(uli):
 
   return count
 
-def generate_licensees(post_data):
-  num = post_data["NumLicensees"] or 0
+def generate_licensees(num_licensees):
+  num = num_licensees or 0
   fake = Faker()
   types = ["Broker", "Agent", "Salesperson", "Appraiser"]
 

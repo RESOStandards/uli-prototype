@@ -92,14 +92,29 @@ def registerLicensee():
       ), 201
 
 
-@app.route('/generate_licensees', methods=['POST'])
-def generateLicensees():
-  post_data = request.get_json(force=True)
-  num_licensees = generate_licensees(post_data)
-  return jsonify(status=True,message=str(num_licensees) + ' generated!'), 201
+
 
 ### ADMIN METHODS ###
 API_KEY = '_admin_token' #TODO: add real admin tokens
+
+@app.route('/generate_licensees', methods=['POST'])
+def generateLicensees():
+  post_data = request.get_json(force=True)
+  api_key = post_data.get('token', None)
+  num_licensees = post_data.get('NumLicensees', None)
+  
+  if api_key is None or api_key != API_KEY:
+    return jsonify(
+        status=False,
+        message='Invalid Access Token!'
+    ), 403
+
+  num_licensees = generate_licensees(num_licensees)
+  
+  return jsonify(
+        status=True,
+        message=str(num_licensees) + ' generated!'
+    ), 201
 
 @app.route('/find_licensee', methods=['POST'])
 def getLicensee():
@@ -120,9 +135,9 @@ def getLicensee():
         message='uli is required when making this request!'
     ), 400
 
-  count = find_licensee(uli)
+  licensee = find_licensee(uli)
 
-  if count:
+  if licensee:
     return jsonify(
         status=True,
         message='ULI found!',
