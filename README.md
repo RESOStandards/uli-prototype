@@ -16,6 +16,8 @@ To run, simply bring up the webserver, web app,  and database with the following
     docker-compose build
     docker-compose up -d
 
+# Interactive Swagger Documentation
+After the project has been started, view the Open API Specification and test it out with the Swagger UI available at http://localhost/api/docs
 # Sample Requests
 ## Registering a User
 

@@ -18,15 +18,15 @@
     "tags": [
       {
         "name": "registration",
-        "description": "Everything about registering licensees"
+        "description": "Examples for registering licensees"
       },
       {
         "name": "query",
-        "description": "Query Licensees"
+        "description": "Examples for querying the registry"
       },
       {
         "name": "admin",
-        "description": "Administrative Functions"
+        "description": "Administrative Functions like data generation, delete"
       }
     ],
     "schemes": [
@@ -66,7 +66,41 @@
             }
           }
         }
-     }
+     },
+     "/query": {
+      "post": {
+        "tags": [
+          "query"
+        ],
+        "summary": "Queries a ULI",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Member object that needs to be added to the registery",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Member"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/RegistryResponse"
+            }
+          }
+        }
+      }
+    }
     },
     "securityDefinitions": {
       "api_key": {
