@@ -76,7 +76,7 @@
       }
     },
     "definitions": {
-      "License": {
+      "LicenseInfo": {
         "type": "object",
         "properties": { 
           "agency": {
@@ -91,12 +91,6 @@
             "type": "string",
             "example": "Broker"
           }
-        }
-      },
-      "LicenseInfo": {
-        "type": "list",
-        "additionalProperties": { 
-            "$ref": "#/definitions/License"
         }
       },
       "RegistryResponse": {
@@ -140,7 +134,8 @@
             "example": "william05@marquez.com"
           },
           "LicenseInfo": {
-            "$ref": "#/definitions/LicenseInfo"
+            "type": "string",
+            "example": "[{\"agency\": \"SD\",\"number\": \"738532\",\"type\": \"Broker\"}]"
           }
         }
       }
