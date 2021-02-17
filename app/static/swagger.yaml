@@ -1,0 +1,146 @@
+swagger: '2.0'
+info:
+  description: >-
+    This is a sample ULI server.  You can find out more about ULI at
+    [https://reso.org](https://reso.org). For this sample, you can use the api
+    key `_admin_token` to test the authorization filters.
+  version: 1.0.0
+  title: ULI Proof of Concept
+  termsOfService: >-
+    https://2xx2gy2ovf3r21jclkjio3x8-wpengine.netdna-ssl.com/wp-content/uploads/2021/01/191223-RESO-2020-websitetermsconditions-clean-2021.pdf
+  contact:
+    email: dconroy@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+host: 'localhost:5000'
+basePath: /
+tags:
+  - name: registration
+    description: Examples for registering licensees
+  - name: query
+    description: Examples for querying the registry
+  - name: admin
+    description: 'Administrative Functions like data generation, delete'
+schemes:
+  - http
+paths:
+  /register:
+    post:
+      tags:
+        - registration
+      summary: Registers a ULI
+      description: ''
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Member object that needs to be added to the registery
+          required: true
+          schema:
+            $ref: '#/definitions/Member'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/RegistryResponse'
+  /query:
+    post:
+      tags:
+        - query
+      summary: Queries a ULI
+      description: ''
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Member object that needs to be added to the registery
+          required: true
+          schema:
+            $ref: '#/definitions/Member'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/RegistryResponse'
+  /remove_licensees:
+    delete:
+      tags:
+        - admin
+      summary: Queries a ULI
+      description: ''
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Member object that needs to be added to the registery
+          required: true
+          schema:
+            $ref: '#/definitions/Member'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/RegistryResponse'
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: token
+    in: header
+definitions:
+  LicenseInfo:
+    type: object
+    properties:
+      agency:
+        type: string
+        example: SD
+      number:
+        type: string
+        example: '738532'
+      type:
+        type: string
+        example: Broker
+  RegistryResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Found ULI!
+      status:
+        type: boolean
+      uli:
+        type: string
+        example: 602c6bbead2cef1872ea1e8d
+  Member:
+    type: object
+    required:
+      - MemberFirstName
+      - MemberLastName
+      - MemberEmail
+    properties:
+      MemberNationalAssociationId:
+        type: string
+        example: hjRWlmDkIHlxvrcQTbYBSvmKvVRcBw
+      MemberFirstName:
+        type: string
+        example: Tracy
+      MemberLastName:
+        type: string
+        example: Washington
+      MemberEmail:
+        type: string
+        example: william05@marquez.com
+      LicenseInfo:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/LicenseInfo'
