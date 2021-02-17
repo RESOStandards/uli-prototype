@@ -16,10 +16,11 @@ To run, simply bring up the webserver, web app,  and database with the following
     docker-compose build
     docker-compose up -d
 
-# Registering a User
-To register a user
+# Sample Requests
+## Registering a User
 
-    POST http://localhost/register 
+POST http://localhost/register 
+
     {
     "MemberNationalAssociationId": "084001677",
     "MemberEmail": "SarahConnor@gmail.com",
@@ -54,16 +55,17 @@ To register a user
         "status": true,
         "uli": "602ac76cd790ab1c770cbbbf"
     }
-## Sample Return - Potential Matches Found
+## Sample Return - Potential Matches Found, No User Created, ULI Returned
     {
         "message": "Found ULI!",
-        "status": true
+        "status": true,
+        "uli": "602c6bbead2cef1872ea1e8d"
     }
-# Querying a User
-Sample POST to http://localhost/query
+## Querying a User
+POST http://localhost/query
 
     {
-        "MemberNationalAssociationId": "hjRWlmDkIHlxvrcQTbYBSvmKvVRcBw2",
+        "MemberNationalAssociationId": "hjRWlmDkIHlxvrcQTbYBSvmKvVRcBw",
         "MemberFirstName": "Tracy",
         "MemberLastName": "Washington",
         "MemberEmail": "william05@marquez.com",
@@ -83,20 +85,54 @@ Sample POST to http://localhost/query
 ## Sample Return - Match Found
     {
         "message": "Found ULI!",
-        "status": true
+        "status": true,
+        "uli": "602c6bbead2cef1872ea1e8d"
     }
 
 ## Sample Return - No Match Found
     {
         "message": "ULI Not Found!",
-        "status": true
+        "status": true,
+        "uli": null
+    }
+
+# Admin Functions
+## Find Licensee
+
+POST to http://localhost/find_licensee
+
+    {
+        "token": "_admin_token",
+        "uli": "602c5445dadc7a3f8160971f"
+    }
+
+
+{
+    "message": "ULI found!",
+    "status": true,
+    "uli": "602c6bbead2cef1872ea1e8d"
+}
+## Remove Licensee
+DELETE http://localhost/remove_licensees
+
+    {
+        "token": "_admin_token",
+        "uli": "602c5445dadc7a3f8160971f"
     }
 
 ## Generate Test Data 
 Sample POST to http://localhost/generate_licensees
 
+    {   
+        "token": "_admin_token",
+        "NumLicensees": 1000
+    }
+
+Sample Return
+
     {
-        "NumLicensees": 100000
+        "message": "1000 generated!",
+        "status": true
     }
 ## Outstanding Questions
 

@@ -55,8 +55,7 @@ def search_licensee(member):
       uli = str(matched_by_license.id)
               
   return {'has_match': has_match, 'status_message' : status_message, 'has_error': has_error, 'uli': uli}
-
-
+ 
 def search_licensee2(post_data):
   status_message = ""
   has_error = False
