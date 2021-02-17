@@ -18,6 +18,8 @@ To run, simply bring up the webserver, web app,  and database with the following
 
 # Interactive Swagger Documentation
 After the project has been started, view the Open API Specification and test it out with the Swagger UI available at http://localhost/api/docs
+
+![Swagger-UI](/app/static/swagger-screenshot.png?raw=true "Optional Title")
 # Sample Requests
 ## Registering a User
 
