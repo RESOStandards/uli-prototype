@@ -5,3 +5,4 @@ python-dotenv==0.15.0
 pytest==6.2.2
 faker==6.0.0
 mongoengine==0.22.1
+flask-swagger-ui==3.36.0
