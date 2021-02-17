@@ -134,8 +134,11 @@
             "example": "william05@marquez.com"
           },
           "LicenseInfo": {
-            "type": "string",
-            "example": "[{\"agency\": \"SD\",\"number\": \"738532\",\"type\": \"Broker\"}]"
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/definitions/LicenseInfo"
+            }
           }
         }
       }
