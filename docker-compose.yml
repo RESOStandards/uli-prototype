@@ -18,8 +18,8 @@ services:
       MONGODB_USERNAME: flaskuser
       MONGODB_PASSWORD: your_mongodb_password
       MONGODB_HOSTNAME: mongodb
-#    volumes:
-#      - appdata:/var/www
+    volumes:
+      - ./app/:/var/www
     depends_on:
       - mongodb
     networks:
