@@ -106,7 +106,6 @@ def remove_licensee(uli):
   """Deletes a licensee with the given ULI"""
   try:
     member = models.Member.objects.get(id=uli).delete()
-    print("aqui2")
     return True
   except:
     pass
