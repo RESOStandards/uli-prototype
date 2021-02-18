@@ -6,7 +6,7 @@ class Member(Document):
     MemberLastName = StringField(required=True)
     MemberEmail = StringField(required=True)
     LicenseInfo = ListField()
-    date_created = DateTimeField(default=datetime.datetime.utcnow)
+    ModificationTimestamp = DateTimeField(default=datetime.datetime.utcnow)
 
     def to_json(self):
         return {
