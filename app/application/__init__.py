@@ -8,10 +8,6 @@ def create_app():
     """Initialize the core application."""
     app = Flask(__name__, instance_relative_config=False)
     app.config.from_object('config.Config')
-    app.config['MONGODB_SETTINGS'] = {
-        'host': 'mongodb://flaskuser:your_mongodb_password@localhost:27017/flaskdb'
-    }
-
     print(app.config)
     db.init_app(app)
 

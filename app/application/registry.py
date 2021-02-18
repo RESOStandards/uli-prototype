@@ -39,7 +39,7 @@ def search_licensee(member):
     licenses_to_check = member.LicenseInfo
 
     #pull users with matching first/last using query sets
-    _licensees = models.objects.filter(Q(MemberFirstName=member.MemberFirstName) & 
+    _licensees = models.Member.objects.filter(Q(MemberFirstName=member.MemberFirstName) & 
                                         Q(MemberLastName=member.MemberLastName))
     
     #check every license submitted against every license held by people with same first and last name
