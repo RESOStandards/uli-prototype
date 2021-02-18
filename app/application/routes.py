@@ -99,7 +99,7 @@ def generateLicensees():
         message='Invalid Access Token!'
     ), 403
 
-  num_licensees = generate_licensees(num_licensees)
+  num_licensees = registry.generate_licensees(num_licensees)
   
   return jsonify(
         status=True,
@@ -125,7 +125,7 @@ def getLicensee():
         message='uli is required when making this request!'
     ), 400
 
-  licensee = find_licensee(uli)
+  licensee = registry.find_licensee(uli)
 
   if licensee:
     return jsonify(
@@ -159,7 +159,7 @@ def removeLicensee():
         message='uli is required when making this request!'
     ), 400
 
-  licensee = remove_licensee(uli)
+  licensee = registry.remove_licensee(uli)
 
   if licensee:
     return jsonify(
