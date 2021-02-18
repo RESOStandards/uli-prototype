@@ -1,10 +1,5 @@
-import json
-import random
-from faker import Faker
-from utils import ordered
-from models import Member
-from flask import jsonify
-from mongoengine import *
+from . import utils
+from . import models
 
 # TODO: not sure whether this would work in production because the nested licensees would likely
 # have different key or modification timestamp fields but would be the same if their defining license
@@ -25,7 +20,7 @@ def search_licensee(member):
 
   #check MemberNationalAssociationId, and if matches, confirm first name last name match
   if member.MemberNationalAssociationId is not None:
-      licensees = Member.objects(MemberNationalAssociationId=member.MemberNationalAssociationId)
+      licensees = models.Member.objects(MemberNationalAssociationId=member.MemberNationalAssociationId)
       if licensees.count() > 1:
         has_error = True
         status_message = 'ERROR: More than one record was found with the given MemberNationalAssociationId'
@@ -44,7 +39,7 @@ def search_licensee(member):
     licenses_to_check = member.LicenseInfo
 
     #pull users with matching first/last using query sets
-    _licensees = Member.objects.filter(Q(MemberFirstName=member.MemberFirstName) & 
+    _licensees = models.objects.filter(Q(MemberFirstName=member.MemberFirstName) & 
                                         Q(MemberLastName=member.MemberLastName))
     
     #check every license submitted against every license held by people with same first and last name
