@@ -27,7 +27,7 @@ db.member.insert(
               "type": "Salesperson"
               }
           ],
-          "date_created": new Date()
+          "ModificationTimestamp": new Date()
           }
       ]
    )
@@ -60,7 +60,7 @@ db.member.insert(
             "type": "Salesperson"
             }
         ],
-        "date_created": new Date()
+        "ModificationTimestamp": new Date()
         }
     ]
  )
@@ -93,7 +93,7 @@ db.member.insert(
           "type": "Salesperson"
           }
         ],
-        "date_created": new Date()
+        "ModificationTimestamp": new Date()
         }
   ]
 )
