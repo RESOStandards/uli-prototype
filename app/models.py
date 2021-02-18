@@ -4,7 +4,7 @@ class Member(Document):
     MemberNationalAssociationId = StringField()
     MemberFirstName = StringField(required=True)
     MemberLastName = StringField(required=True)
-    MemberEmail = StringField(required=True)
+    MemberEmail = StringField()
     LicenseInfo = ListField()
     ModificationTimestamp = DateTimeField(default=datetime.datetime.utcnow)
 
