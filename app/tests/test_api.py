@@ -4,7 +4,7 @@ import json
 from urllib.parse import urljoin
 from urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
-from application import *
+from application import create_app
 
 FAKE_TESTING_ID = 'fakey-fake-id'
 FAKE_TESTING_RECORD = '{ "UniqueLicenseeIdentifier": "%s", "MemberNationalAssociationId" : "%s", "MemberFirstName" : "Fakey", "MemberLastName" : "Fake", "MemberEmail" : "fakey@fake.com", "LicenseInfo" : [ { "agency" : "HI", "number" : "fake", "type" : "Broker" }, { "agency" : "AZ", "number" : "fake", "type" : "Broker" }, { "agency" : "OH", "number" : "fake", "type" : "Agent" } ] }' % (FAKE_TESTING_ID, FAKE_TESTING_ID)
@@ -15,14 +15,15 @@ __ULI__ = None
 
 
 
+@pytest.fixture(scope='module')
+def test_client():
+    flask_app = create_app()
 
-@pytest.fixture
-def wait_for_api():
-    app = create_app()
-    print(app)
-    
-    return app
-    
+    # Create a test client using the Flask application configured for testing
+    with flask_app.test_client() as testing_client:
+        # Establish an application context
+        with flask_app.app_context():
+            yield testing_client  # this is where the testing happens!
 # MONGODB_HOST = 'mongomock://localhost'
 
 
@@ -39,29 +40,33 @@ def wait_for_api():
 #   api_url = "http://%s/" % (service.hostname)
 #   assert request_session.get(api_url)
 #   return request_session, api_url
-  
-def test_successful_registration(wait_for_api):
+
+def test_home_page(test_client):
   # TODO: add teardown that removes this record
-  request_session, api_url = wait_for_api
-  item = request_session.post('%s/register' % api_url, data = FAKE_TESTING_RECORD).json()
-  global __ULI__
-  __ULI__ = item['uli']
+  response = test_client.get('/')
+  #print(response)
+  assert response.status_code == 200
+  #assert response["message"]  == "Welcome to the ULI Registry app!"
 
-  #ensure that record was inserted
-  inserted = request_session.post('%s/find_licensee' % api_url, data = '{"token": "%s", "uli": "%s"}' % (FAKE_ADMIN_TOKEN, __ULI__)).json() 
-  assert inserted['uli'] == __ULI__
+# def test_successful_registration(test_client):
+#   # TODO: add teardown that removes this record
+#   response = test_client.post('/register', data = FAKE_TESTING_RECORD).json()
+#   global __ULI__
+#   __ULI__ = item['uli']
 
-def test_successful_query(wait_for_api):
-  request_session, api_url = wait_for_api
-  item = request_session.post('%s/query' % api_url, data = FAKE_TESTING_RECORD).json()
-  assert item['uli'] == __ULI__
-  assert item['message'] == 'Found ULI!'
+#   #ensure that record was inserted
+#   inserted = test_client.post('/find_licensee', data = '{"token": "%s", "uli": "%s"}' % (FAKE_ADMIN_TOKEN, __ULI__)).json() 
+#   assert inserted['uli'] == __ULI__
 
-def test_remove_licensee(wait_for_api):
-  request_session, api_url = wait_for_api
-  item = request_session.delete('%s/remove_licensee' % api_url, data = '{"token": "%s", "uli": "%s"}' % (FAKE_ADMIN_TOKEN, __ULI__)).json()
-  assert item['message'] == 'uli: ' + __ULI__ + ' deleted!'
+# def test_successful_query(test_client):
+#   item = test_client.post('%s/query' % api_url, data = FAKE_TESTING_RECORD).json()
+#   assert item['uli'] == __ULI__
+#   assert item['message'] == 'Found ULI!'
 
-  inserted = request_session.post('%s/find_licensee' % api_url, data = '{"token": "%s", "uli": "%s"}' % (FAKE_ADMIN_TOKEN, __ULI__)).json() 
-  assert inserted['message'] == 'uli: ' + __ULI__ + ' not found!'
+# def test_remove_licensee(test_client):
+#   item = test_client.delete('%s/remove_licensee' % api_url, data = '{"token": "%s", "uli": "%s"}' % (FAKE_ADMIN_TOKEN, __ULI__)).json()
+#   assert item['message'] == 'uli: ' + __ULI__ + ' deleted!'
+
+#   inserted = test_client.post('%s/find_licensee' % api_url, data = '{"token": "%s", "uli": "%s"}' % (FAKE_ADMIN_TOKEN, __ULI__)).json() 
+#   assert inserted['message'] == 'uli: ' + __ULI__ + ' not found!'
 
