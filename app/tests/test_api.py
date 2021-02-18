@@ -4,8 +4,7 @@ import json
 from urllib.parse import urljoin
 from urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
-
-pytest_plugins = ["docker_compose"]
+from application import *
 
 FAKE_TESTING_ID = 'fakey-fake-id'
 FAKE_TESTING_RECORD = '{ "UniqueLicenseeIdentifier": "%s", "MemberNationalAssociationId" : "%s", "MemberFirstName" : "Fakey", "MemberLastName" : "Fake", "MemberEmail" : "fakey@fake.com", "LicenseInfo" : [ { "agency" : "HI", "number" : "fake", "type" : "Broker" }, { "agency" : "AZ", "number" : "fake", "type" : "Broker" }, { "agency" : "OH", "number" : "fake", "type" : "Agent" } ] }' % (FAKE_TESTING_ID, FAKE_TESTING_ID)
@@ -14,22 +13,32 @@ ULI_FOUND_MESSAGE = 'Unique Licensee Identifier: %s found!'
 
 __ULI__ = None
 
-#    MONGODB_HOST = 'mongomock://localhost'
 
 
-# Invoking this fixture: 'function_scoped_container_getter' starts all services
-@pytest.fixture(scope="function")
-def wait_for_api(function_scoped_container_getter):
-  request_session = requests.Session()
-  retries = Retry(total=5,
-                  backoff_factor=0.1,
-                  status_forcelist=[500, 502, 503, 504])
-  request_session.mount('http://', HTTPAdapter(max_retries=retries))
 
-  service = function_scoped_container_getter.get("webserver").network_info[0]
-  api_url = "http://%s/" % (service.hostname)
-  assert request_session.get(api_url)
-  return request_session, api_url
+@pytest.fixture
+def wait_for_api():
+    app = create_app()
+    print(app)
+    
+    return app
+    
+# MONGODB_HOST = 'mongomock://localhost'
+
+
+# # Invoking this fixture: 'function_scoped_container_getter' starts all services
+# @pytest.fixture(scope="function")
+# def wait_for_api(function_scoped_container_getter):
+#   request_session = requests.Session()
+#   retries = Retry(total=5,
+#                   backoff_factor=0.1,
+#                   status_forcelist=[500, 502, 503, 504])
+#   request_session.mount('http://', HTTPAdapter(max_retries=retries))
+
+#   service = function_scoped_container_getter.get("webserver").network_info[0]
+#   api_url = "http://%s/" % (service.hostname)
+#   assert request_session.get(api_url)
+#   return request_session, api_url
   
 def test_successful_registration(wait_for_api):
   # TODO: add teardown that removes this record

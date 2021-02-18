@@ -1,6 +1,6 @@
 import pytest
 import json
-from app.utils import format_uli, hide_MemberEmail, ordered
+from application.utils import format_uli, hide_MemberEmail, ordered
 
 def test_format_uli():
   licensee = dict(
