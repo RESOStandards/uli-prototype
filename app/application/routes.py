@@ -17,14 +17,14 @@ def licensee():
   if record.get('LicenseInfo') is None:
      record['LicenseInfo'] = ""
 
-  member = Member(MemberNationalAssociationId=record['MemberNationalAssociationId'],
+  member = models.Member(MemberNationalAssociationId=record['MemberNationalAssociationId'],
                   MemberFirstName=record['MemberFirstName'],
                   MemberLastName=record['MemberLastName'],
                   MemberEmail=record['MemberEmail'],
                   LicenseInfo=record['LicenseInfo']
           )
           
-  result = search_licensee(member)
+  result = registry.search_licensee(member)
 
   if result['has_error']:
     return jsonify(
@@ -44,7 +44,7 @@ def licensee():
     message='ULI Not Found!',
     uli = result.get('uli')
   ), 404
-  
+
 @app.route('/register', methods=['POST'])
 def registerLicensee():
   record = json.loads(request.data)

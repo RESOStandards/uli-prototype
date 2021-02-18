@@ -1,5 +1,6 @@
 from . import utils
 from . import models
+from mongoengine import *
 
 # TODO: not sure whether this would work in production because the nested licensees would likely
 # have different key or modification timestamp fields but would be the same if their defining license
@@ -8,7 +9,7 @@ def match_licenses(licensees, licenses_to_check):
     for licensee in licensees: #for each licensee 
       for individual_license in licenses_to_check: # and every license provided in the search
           for license_held in licensee["LicenseInfo"]:
-              if(ordered(individual_license) == ordered(license_held)): #order the json to make sure you get exact matches
+              if(utils.ordered(individual_license) == utils.ordered(license_held)): #order the json to make sure you get exact matches
                   return licensee
 
 # TODO: this method will allow dupe records to be created with NRDS and distinct name parts...
