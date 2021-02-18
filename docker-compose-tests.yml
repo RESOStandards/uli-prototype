@@ -14,10 +14,8 @@ services:
       APP_ENV: "prod"
       APP_DEBUG: "true"
       APP_PORT: 5000
-      MONGODB_DATABASE: flaskdb
-      MONGODB_USERNAME: flaskuser
-      MONGODB_PASSWORD: your_mongodb_password
-      MONGODB_HOSTNAME: mongodb
+    env_file:
+     - ./app/.env
 #    volumes:
 #      - appdata:/var/www
     depends_on:

@@ -1,5 +1,8 @@
 from . import utils
 from . import models
+import random
+from faker import Faker
+from flask_mongoengine import *
 from mongoengine import *
 
 # TODO: not sure whether this would work in production because the nested licensees would likely
@@ -18,7 +21,7 @@ def search_licensee(member):
   has_error = False
   has_match = False
   uli = None
-
+  
   #check MemberNationalAssociationId, and if matches, confirm first name last name match
   if member.MemberNationalAssociationId is not None:
       licensees = models.Member.objects(MemberNationalAssociationId=member.MemberNationalAssociationId)
@@ -124,7 +127,7 @@ def generate_licensees(num_licensees):
   types = ["Broker", "Agent", "Salesperson", "Appraiser"]
 
   for _ in range(num):
-    member = Member(MemberNationalAssociationId=fake.pystr(30, 30),
+    member = models.Member(MemberNationalAssociationId=fake.pystr(30, 30),
                     MemberFirstName=fake.first_name(),
                     MemberLastName=fake.last_name(),
                     MemberEmail=fake.email(),

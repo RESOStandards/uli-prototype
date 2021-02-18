@@ -14,6 +14,9 @@ ULI_FOUND_MESSAGE = 'Unique Licensee Identifier: %s found!'
 
 __ULI__ = None
 
+#    MONGODB_HOST = 'mongomock://localhost'
+
+
 # Invoking this fixture: 'function_scoped_container_getter' starts all services
 @pytest.fixture(scope="function")
 def wait_for_api(function_scoped_container_getter):

@@ -15,22 +15,16 @@ class Config:
     MONGODB_PORT = int(environ.get('MONGODB_PORT'))
     MONGODB_USERNAME = environ.get('MONGODB_USERNAME')
     MONGODB_PASSWORD = environ.get('MONGODB_PASSWORD')
-    DEBUG = True
-
-class ProdConfig(Config):
-    FLASK_ENV = 'production'
-    DEBUG = False
-    TESTING = False
-    DATABASE_URI = environ.get('PROD_DATABASE_URI')
-
-class DevConfig(Config):
     FLASK_ENV = 'development'
     DEBUG = True
     TESTING = True
     DATABASE_URI = environ.get('DEV_DATABASE_URI')
+class ProdConfig(Config):
+    FLASK_ENV = 'production'
+    DEBUG = False
+    TESTING = False
 
 class TestConfig(Config):
     FLASK_ENV = 'development'
     DEBUG = True
     TESTING = True
-    MONGODB_HOST = 'mongomock://localhost'
