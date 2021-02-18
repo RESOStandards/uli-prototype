@@ -24,6 +24,10 @@ def licensee():
   #license info optional
   if record.get('LicenseInfo') is None:
      record['LicenseInfo'] = ""
+  if record.get('MemberNationalAssociationId') is None:
+     record['MemberNationalAssociationId'] = ""
+  if record.get('MemberEmail') is None:
+     record['MemberEmail'] = ""
 
   member = Member(MemberNationalAssociationId=record['MemberNationalAssociationId'],
                   MemberFirstName=record['MemberFirstName'],
@@ -31,7 +35,7 @@ def licensee():
                   MemberEmail=record['MemberEmail'],
                   LicenseInfo=record['LicenseInfo']
           )
-          
+  print(member.to_json())        
   result = search_licensee(member)
 
   if result['has_error']:
@@ -58,6 +62,10 @@ def registerLicensee():
   record = json.loads(request.data)
   if record.get('LicenseInfo') is None:
      record['LicenseInfo'] = ""
+  if record.get('MemberNationalAssociationId') is None:
+     record['MemberNationalAssociationId'] = ""
+  if record.get('MemberEmail') is None:
+     record['MemberEmail'] = ""
   
   member = Member(MemberNationalAssociationId=record['MemberNationalAssociationId'],
                   MemberFirstName=record['MemberFirstName'],
