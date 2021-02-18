@@ -10,22 +10,30 @@ class Config:
     SECRET_KEY = environ.get('SECRET_KEY')
     STATIC_FOLDER = 'static'
     TEMPLATES_FOLDER = 'templates'
+
+class ProdConfig(Config):
+    FLASK_ENV = 'production'
+    DEBUG = False
+    TESTING = False
     MONGODB_DB = environ.get('MONGODB_DB')
     MONGODB_HOST = environ.get('MONGODB_HOST')
     MONGODB_PORT = int(environ.get('MONGODB_PORT'))
     MONGODB_USERNAME = environ.get('MONGODB_USERNAME')
     MONGODB_PASSWORD = environ.get('MONGODB_PASSWORD')
+
+class DevConfig(Config):
     FLASK_ENV = 'development'
     DEBUG = True
     TESTING = True
-    DATABASE_URI = environ.get('DEV_DATABASE_URI')
-class ProdConfig(Config):
-    FLASK_ENV = 'production'
-    DEBUG = False
-    TESTING = False
+    MONGODB_DB = environ.get('MONGODB_DB')
+    MONGODB_HOST = environ.get('MONGODB_HOST')
+    MONGODB_PORT = int(environ.get('MONGODB_PORT'))
+    MONGODB_USERNAME = environ.get('MONGODB_USERNAME')
+    MONGODB_PASSWORD = environ.get('MONGODB_PASSWORD')
 
 class TestConfig(Config):
     FLASK_ENV = 'development'
-    DEBUG = False
-    TESTING = False
-    MONGODB_HOST = 'mongomock://localhost'
+    DEBUG = True
+    TESTING = True
+    MONGO_DB = 'flaskdb'
+    MONGODB_HOST = 'mongomock://localhost/'
