@@ -127,6 +127,7 @@ def getLicensee():
 
   licensee = registry.find_licensee(uli)
 
+
   if licensee:
     return jsonify(
         status=True,
@@ -158,7 +159,8 @@ def removeLicensee():
         status=False,
         message='uli is required when making this request!'
     ), 400
-
+  print("removing licensee")
+  print("find url" + str(uli))
   licensee = registry.remove_licensee(uli)
 
   if licensee:

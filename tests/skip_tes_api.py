@@ -5,6 +5,7 @@ from urllib.parse import urljoin
 from urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
 from application import create_app
+from flask import jsonify
 
 FAKE_TESTING_ID = 'fakey-fake-id'
 FAKE_TESTING_RECORD = '{ "UniqueLicenseeIdentifier": "%s", "MemberNationalAssociationId" : "%s", "MemberFirstName" : "Fakey", "MemberLastName" : "Fake", "MemberEmail" : "fakey@fake.com", "LicenseInfo" : [ { "agency" : "HI", "number" : "fake", "type" : "Broker" }, { "agency" : "AZ", "number" : "fake", "type" : "Broker" }, { "agency" : "OH", "number" : "fake", "type" : "Agent" } ] }' % (FAKE_TESTING_ID, FAKE_TESTING_ID)
@@ -18,6 +19,7 @@ __ULI__ = None
 @pytest.fixture(scope='module')
 def test_client():
     flask_app = create_app()
+    flask_app.config.from_object('config.TestConfig')
 
     # Create a test client using the Flask application configured for testing
     with flask_app.test_client() as testing_client:
@@ -46,17 +48,18 @@ def test_home_page(test_client):
   response = test_client.get('/')
   #print(response)
   assert response.status_code == 200
+  assert b"Welcome to the ULI Registry app!" in response.data
   #assert response["message"]  == "Welcome to the ULI Registry app!"
 
-# def test_successful_registration(test_client):
+def test_successful_registration(test_client):
 #   # TODO: add teardown that removes this record
-#   response = test_client.post('/register', data = FAKE_TESTING_RECORD).json()
-#   global __ULI__
-#   __ULI__ = item['uli']
+    response = test_client.post('/register', data = FAKE_TESTING_RECORD).json()
+    print(response.data)
+    #__ULI__ = response['uli']
 
 #   #ensure that record was inserted
-#   inserted = test_client.post('/find_licensee', data = '{"token": "%s", "uli": "%s"}' % (FAKE_ADMIN_TOKEN, __ULI__)).json() 
-#   assert inserted['uli'] == __ULI__
+    inserted = test_client.post('/find_licensee', data = '{"token": "%s", "uli": "%s"}' % (FAKE_ADMIN_TOKEN, __ULI__)).json() 
+    assert inserted['uli'] == __ULI__
 
 # def test_successful_query(test_client):
 #   item = test_client.post('%s/query' % api_url, data = FAKE_TESTING_RECORD).json()

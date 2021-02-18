@@ -28,3 +28,4 @@ class TestConfig(Config):
     FLASK_ENV = 'development'
     DEBUG = False
     TESTING = False
+    MONGODB_HOST = 'mongomock://localhost'

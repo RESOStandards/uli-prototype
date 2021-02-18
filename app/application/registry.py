@@ -105,7 +105,8 @@ def search_licensee2(post_data):
 def remove_licensee(uli):
   """Deletes a licensee with the given ULI"""
   try:
-    member = Member.objects.get(id=uli).delete()
+    member = models.Member.objects.get(id=uli).delete()
+    print("aqui2")
     return True
   except:
     pass
@@ -115,7 +116,8 @@ def remove_licensee(uli):
 def find_licensee(uli):
   """Finds a licensee with the given ULI"""
   try:
-    count = Member.objects.get(id=uli)
+    count = models.Member.objects.get(id=uli)
+
   except:
     count = None
 
