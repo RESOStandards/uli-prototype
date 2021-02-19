@@ -17,7 +17,7 @@ class ProdConfig(Config):
     TESTING = False
     MONGODB_DB = environ.get('MONGODB_DB')
     MONGODB_HOST = environ.get('MONGODB_HOST')
-    MONGODB_PORT = int(environ.get('MONGODB_PORT'))
+    MONGODB_PORT = environ.get('MONGODB_PORT')
     MONGODB_USERNAME = environ.get('MONGODB_USERNAME')
     MONGODB_PASSWORD = environ.get('MONGODB_PASSWORD')
 
@@ -27,7 +27,7 @@ class DevConfig(Config):
     TESTING = True
     MONGODB_DB = environ.get('MONGODB_DB')
     MONGODB_HOST = environ.get('MONGODB_HOST')
-    MONGODB_PORT = int(environ.get('MONGODB_PORT'))
+    MONGODB_PORT = environ.get('MONGODB_PORT')
     MONGODB_USERNAME = environ.get('MONGODB_USERNAME')
     MONGODB_PASSWORD = environ.get('MONGODB_PASSWORD')
 
