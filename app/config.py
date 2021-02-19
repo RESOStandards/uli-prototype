@@ -32,6 +32,7 @@ class DevConfig(Config):
     MONGODB_PASSWORD = environ.get('MONGODB_PASSWORD')
 
 class TestConfig(Config):
+    #for containerless testing in the future
     FLASK_ENV = 'development'
     DEBUG = True
     TESTING = True
