@@ -39,16 +39,16 @@ def test_successful_registration(wait_for_api):
   inserted = request_session.post('%s/find_licensee' % api_url, data = '{"token": "%s", "uli": "%s"}' % (FAKE_ADMIN_TOKEN, __ULI__)).json() 
   assert inserted['uli'] == __ULI__
 
-# def test_successful_query(wait_for_api):
-#   request_session, api_url = wait_for_api
-#   item = request_session.post('%s/query' % api_url, data = FAKE_TESTING_RECORD).json()
-#   assert item['uli'] == __ULI__
-#   assert item['message'] == 'Found ULI!'
+def test_successful_query(wait_for_api):
+  request_session, api_url = wait_for_api
+  item = request_session.post('%s/query' % api_url, data = FAKE_TESTING_RECORD).json()
+  assert item['uli'] == __ULI__
+  assert item['message'] == 'Found ULI!'
 
-# def test_remove_licensee(wait_for_api):
-#   request_session, api_url = wait_for_api
-#   item = request_session.delete('%s/remove_licensee' % api_url, data = '{"token": "%s", "uli": "%s"}' % (FAKE_ADMIN_TOKEN, __ULI__)).json()
-#   assert item['message'] == 'uli: ' + __ULI__ + ' deleted!'
+def test_remove_licensee(wait_for_api):
+  request_session, api_url = wait_for_api
+  item = request_session.delete('%s/remove_licensee' % api_url, data = '{"token": "%s", "uli": "%s"}' % (FAKE_ADMIN_TOKEN, __ULI__)).json()
+  assert item['message'] == 'uli: ' + __ULI__ + ' deleted!'
 
-#   inserted = request_session.post('%s/find_licensee' % api_url, data = '{"token": "%s", "uli": "%s"}' % (FAKE_ADMIN_TOKEN, __ULI__)).json() 
-#   assert inserted['message'] == 'uli: ' + __ULI__ + ' not found!'
+  inserted = request_session.post('%s/find_licensee' % api_url, data = '{"token": "%s", "uli": "%s"}' % (FAKE_ADMIN_TOKEN, __ULI__)).json() 
+  assert inserted['message'] == 'uli: ' + __ULI__ + ' not found!'
