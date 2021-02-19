@@ -18,7 +18,7 @@ services:
       MONGODB_USERNAME: flaskuser
       MONGODB_PASSWORD: your_mongodb_password
       MONGODB_HOSTNAME: mongodb
-      MONGODB_HOST: mongodb
+
     depends_on:
       - mongodb
     networks:
