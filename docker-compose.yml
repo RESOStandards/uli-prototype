@@ -3,8 +3,8 @@ services:
 
   flask:
     build:
-      context: app
-      dockerfile: application/Dockerfile
+      context: application
+      dockerfile: Dockerfile
     container_name: flask
     image: digitalocean.com/flask-python:3.6
     restart: unless-stopped
