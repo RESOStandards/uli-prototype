@@ -40,7 +40,7 @@ def test_find_ULI(test_client):
   # global __ULI__
   # __ULI__ = item['uli']
   print(response.data)
-  assert response.status_code == 404
+  assert response.status_code == 200
   
 # def test_successful_registration(test_client):
 # response.client.post('/login', data=dict(
