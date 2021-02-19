@@ -45,6 +45,6 @@ jobs:
       - name: Run Python Tests
         run: | 
           python3 -m pip install --upgrade pip
-          python3 -m pip install -r app/requirements.txt
+          python3 -m pip install -r app/requirements-test.txt
           python3 -m pip install pytest requests pytest-docker-compose 
           python3 -m pytest -v --docker-compose=docker-compose-tests.yml
