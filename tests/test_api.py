@@ -4,7 +4,7 @@ import json
 from urllib.parse import urljoin
 from urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
-from application import create_app
+from app.application import create_app
 
 FAKE_TESTING_ID = 'fakey-fake-id'
 FAKE_TESTING_RECORD = '{ "UniqueLicenseeIdentifier": "%s", "MemberNationalAssociationId" : "%s", "MemberFirstName" : "Fakey", "MemberLastName" : "Fake", "MemberEmail" : "fakey@fake.com", "LicenseInfo" : [ { "agency" : "HI", "number" : "fake", "type" : "Broker" }, { "agency" : "AZ", "number" : "fake", "type" : "Broker" }, { "agency" : "OH", "number" : "fake", "type" : "Agent" } ] }' % (FAKE_TESTING_ID, FAKE_TESTING_ID)
@@ -35,12 +35,12 @@ def test_home_page(test_client):
   assert b"Welcome to the ULI Registry app!" in response.data
 
 
-def test_find_ULI(test_client):
-  response = test_client.post('/find_licensee', data=json.dumps(FAKE_TESTING_RECORD), follow_redirects=True)
-  # global __ULI__
-  # __ULI__ = item['uli']
-  print(response.data)
-  assert response.status_code == 200
+# def test_find_ULI(test_client):
+#   response = test_client.post('/find_licensee', data=json.dumps(FAKE_TESTING_RECORD), follow_redirects=True)
+#   # global __ULI__
+#   # __ULI__ = item['uli']
+#   print(response.data)
+#   assert response.status_code == 200
   
 # def test_successful_registration(test_client):
 # response.client.post('/login', data=dict(
