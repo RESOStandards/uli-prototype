@@ -5,7 +5,16 @@ from urllib.parse import urljoin
 from urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
 from app.application import create_app
-from app.application.config import TestConfig
+
+class TestConfig:
+    """Base config."""
+    STATIC_FOLDER = 'static'
+    TEMPLATES_FOLDER = 'templates'
+    FLASK_ENV = 'development'
+    DEBUG = True
+    TESTING = True
+    MONGO_DB = 'flaskdb'
+    MONGODB_HOST = 'mongomock://localhost/'
 
 FAKE_TESTING_ID = 'fakey-fake-id'
 FAKE_TESTING_RECORD = '{ "UniqueLicenseeIdentifier": "%s", "MemberNationalAssociationId" : "%s", "MemberFirstName" : "Fakey", "MemberLastName" : "Fake", "MemberEmail" : "fakey@fake.com", "LicenseInfo" : [ { "agency" : "HI", "number" : "fake", "type" : "Broker" }, { "agency" : "AZ", "number" : "fake", "type" : "Broker" }, { "agency" : "OH", "number" : "fake", "type" : "Agent" } ] }' % (FAKE_TESTING_ID, FAKE_TESTING_ID)
@@ -21,12 +30,6 @@ __ULI__ = None
 @pytest.fixture(scope='module')
 def test_client():
     flask_app = create_app(TestConfig)
-    # flask_app.config.update(
-    # DEBUG = True,
-    # TESTING = True,
-    # MONGO_DB = 'flaskdb',
-    # MONGODB_HOST = 'mongomock://localhost/'
-    # )
 
     # Create a test client using the Flask application configured for testing
     with flask_app.test_client() as testing_client:

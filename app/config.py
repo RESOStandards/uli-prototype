@@ -29,9 +29,3 @@ class DevConfig(Config):
     MONGODB_USERNAME = environ.get('MONGODB_USERNAME')
     MONGODB_PASSWORD = environ.get('MONGODB_PASSWORD')
 
-class TestConfig(Config):
-    FLASK_ENV = 'development'
-    DEBUG = True
-    TESTING = True
-    MONGO_DB = 'flaskdb'
-    MONGODB_HOST = 'mongomock://localhost/'
