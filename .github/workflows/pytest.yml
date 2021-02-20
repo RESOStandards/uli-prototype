@@ -45,6 +45,5 @@ jobs:
       - name: Run Python Tests
         run: | 
           python3 -m pip install --upgrade pip
-          python3 -m pip install -r requirements.txt
           python3 -m pip install pytest 
-          python3 -m pytest -v 
+          python3 -m pytest app -v 
