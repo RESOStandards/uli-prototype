@@ -17,7 +17,6 @@ class ProdConfig(Config):
     TESTING = False
     MONGODB_DB = environ.get('MONGODB_DB')
     MONGODB_HOST = environ.get('MONGODB_HOST')
-    MONGODB_PORT = environ.get('MONGODB_PORT')
     MONGODB_USERNAME = environ.get('MONGODB_USERNAME')
     MONGODB_PASSWORD = environ.get('MONGODB_PASSWORD')
 
@@ -27,13 +26,6 @@ class DevConfig(Config):
     TESTING = True
     MONGODB_DB = environ.get('MONGODB_DB')
     MONGODB_HOST = environ.get('MONGODB_HOST')
-    MONGODB_PORT = environ.get('MONGODB_PORT')
     MONGODB_USERNAME = environ.get('MONGODB_USERNAME')
     MONGODB_PASSWORD = environ.get('MONGODB_PASSWORD')
 
-class TestConfig(Config):
-    FLASK_ENV = 'development'
-    DEBUG = True
-    TESTING = True
-    MONGO_DB = 'flaskdb'
-    MONGODB_HOST = 'mongomock://localhost/'
