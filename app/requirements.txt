@@ -7,3 +7,4 @@ faker==6.0.0
 mongoengine==0.22.1
 flask-mongoengine==1.0.0
 mongomock==3.22.1
+flask-swagger-ui==3.36.0

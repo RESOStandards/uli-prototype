@@ -16,6 +16,10 @@ To run, simply bring up the webserver, web app,  and database with the following
     docker-compose build
     docker-compose up -d
 
+# Interactive Swagger Documentation
+After the project has been started, view the Open API Specification and test it out with the Swagger UI available at http://localhost/api/docs
+
+![Swagger-UI](/app/application/static/swagger-screenshot.png?raw=true "Optional Title")
 # Sample Requests
 ## Registering a User
 
@@ -140,3 +144,5 @@ Sample Return
 2) Can the matching be improved? 
 3) How do we avoid leaking data?
 4) Do we need to deploy this?
+
+# Disclaimer - This repository is meant for local testing only and contains no access control

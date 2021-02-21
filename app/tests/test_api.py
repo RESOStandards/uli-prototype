@@ -7,6 +7,8 @@ class TestConfig:
     """Base config."""
     STATIC_FOLDER = 'static'
     TEMPLATES_FOLDER = 'templates'
+    SWAGGER_URL = '/api/docs'  # URL for exposing Swagger UI (without trailing '/')
+    API_URL = '/static/swagger.yaml'  
     FLASK_ENV = 'development'
     DEBUG = True
     TESTING = True
