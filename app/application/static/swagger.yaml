@@ -1,11 +1,11 @@
 swagger: '2.0'
 info:
   description: >-
-    This is a sample ULI server.  You can find out more about ULI at
-    [https://reso.org](https://reso.org). For this sample, you can use the api
+    This is a prototype version of a centralized ULI server.  You can find out more about ULI at
+    [https://reso.org](https://reso.org). For this proof of concept, you can use the api
     key `_admin_token` to test the authorization filters.
   version: 1.0.0
-  title: ULI Proof of Concept
+  title: Centralized Universal Licensee Idenfitifaction Service
   termsOfService: >-
     https://2xx2gy2ovf3r21jclkjio3x8-wpengine.netdna-ssl.com/wp-content/uploads/2021/01/191223-RESO-2020-websitetermsconditions-clean-2021.pdf
   contact:
@@ -135,11 +135,11 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/DeleteResponse'
-securityDefinitions:
-  api_key:
-    type: apiKey
-    name: token
-    in: header
+# securityDefinitions:
+#   api_key:
+#     type: apiKey
+#     name: token
+#     in: header
 definitions:
   LicenseInfo:
     type: object
