@@ -30,14 +30,14 @@ def licensee():
     return jsonify(
       status=False,
       message = result.get('status_message')
-    ), 201
+    ), 200
     
   if result['has_match']:
     return jsonify(
       status=True,
       message = result.get('status', 'Found ULI!'),
       uli = result.get('uli')
-    ), 201
+    ), 200
 
   return jsonify(
     status=True,
