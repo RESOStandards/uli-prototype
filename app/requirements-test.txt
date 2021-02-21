@@ -1,10 +1,12 @@
-Flask==1.0.2
+Flask==1.1.2
 Flask-PyMongo==2.2.0
 requests==2.20.1
 python-dotenv==0.15.0
 pytest==6.2.2
 faker==6.0.0
 mongoengine==0.22.1
+flask-mongoengine==1.0.0
+mongomock==3.22.1
 
 cryptography==3.3.2
 pytest-docker-compose==3.2.1

@@ -1,5 +1,0 @@
-[
-  "test_api.py::test_query",
-  "test_api.py::test_successful_query",
-  "test_api.py::test_successful_registration"
-]

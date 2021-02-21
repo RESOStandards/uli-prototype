@@ -1,9 +1,8 @@
-import json
+from . import utils
+from . import models
 import random
 from faker import Faker
-from utils import ordered
-from models import Member
-from flask import jsonify
+from flask_mongoengine import *
 from mongoengine import *
 
 # TODO: not sure whether this would work in production because the nested licensees would likely
@@ -13,7 +12,7 @@ def match_licenses(licensees, licenses_to_check):
     for licensee in licensees: #for each licensee 
       for individual_license in licenses_to_check: # and every license provided in the search
           for license_held in licensee["LicenseInfo"]:
-              if(ordered(individual_license) == ordered(license_held)): #order the json to make sure you get exact matches
+              if(utils.ordered(individual_license) == utils.ordered(license_held)): #order the json to make sure you get exact matches
                   return licensee
 
 # TODO: this method will allow dupe records to be created with NRDS and distinct name parts...
@@ -22,10 +21,10 @@ def search_licensee(member):
   has_error = False
   has_match = False
   uli = None
-
+  
   #check MemberNationalAssociationId, and if matches, confirm first name last name match
   if member.MemberNationalAssociationId is not None:
-      licensees = Member.objects(MemberNationalAssociationId=member.MemberNationalAssociationId)
+      licensees = models.Member.objects(MemberNationalAssociationId=member.MemberNationalAssociationId)
       if licensees.count() > 1:
         has_error = True
         status_message = 'ERROR: More than one record was found with the given MemberNationalAssociationId'
@@ -44,7 +43,7 @@ def search_licensee(member):
     licenses_to_check = member.LicenseInfo
 
     #pull users with matching first/last using query sets
-    _licensees = Member.objects.filter(Q(MemberFirstName=member.MemberFirstName) & 
+    _licensees = models.Member.objects.filter(Q(MemberFirstName=member.MemberFirstName) & 
                                         Q(MemberLastName=member.MemberLastName))
     
     #check every license submitted against every license held by people with same first and last name
@@ -106,7 +105,7 @@ def search_licensee2(post_data):
 def remove_licensee(uli):
   """Deletes a licensee with the given ULI"""
   try:
-    member = Member.objects.get(id=uli).delete()
+    member = models.Member.objects.get(id=uli).delete()
     return True
   except:
     pass
@@ -116,7 +115,8 @@ def remove_licensee(uli):
 def find_licensee(uli):
   """Finds a licensee with the given ULI"""
   try:
-    count = Member.objects.get(id=uli)
+    count = models.Member.objects.get(id=uli)
+
   except:
     count = None
 
@@ -128,7 +128,7 @@ def generate_licensees(num_licensees):
   types = ["Broker", "Agent", "Salesperson", "Appraiser"]
 
   for _ in range(num):
-    member = Member(MemberNationalAssociationId=fake.pystr(30, 30),
+    member = models.Member(MemberNationalAssociationId=fake.pystr(30, 30),
                     MemberFirstName=fake.first_name(),
                     MemberLastName=fake.last_name(),
                     MemberEmail=fake.email(),

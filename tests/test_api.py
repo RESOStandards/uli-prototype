@@ -52,4 +52,3 @@ def test_remove_licensee(wait_for_api):
 
   inserted = request_session.post('%s/find_licensee' % api_url, data = '{"token": "%s", "uli": "%s"}' % (FAKE_ADMIN_TOKEN, __ULI__)).json() 
   assert inserted['message'] == 'uli: ' + __ULI__ + ' not found!'
-

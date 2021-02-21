@@ -1,15 +1,7 @@
-#!/usr/bin/env python
-# encoding: utf-8
-import os
-import settings
 import json
-from models import Member
-from registry import search_licensee, generate_licensees, find_licensee, remove_licensee
-from flask import Flask, request, jsonify
-from mongoengine import *
-
-app = Flask(__name__)
-connect(host='mongodb://' + os.environ['MONGODB_USERNAME'] + ':' + os.environ['MONGODB_PASSWORD'] + '@' + os.environ['MONGODB_HOSTNAME'] + ':27017/' + os.environ['MONGODB_DATABASE'])
+from flask import current_app as app, request, jsonify
+from .  import models
+from . import registry
 
 @app.route('/')
 def index():
@@ -25,14 +17,14 @@ def licensee():
   if record.get('LicenseInfo') is None:
      record['LicenseInfo'] = ""
 
-  member = Member(MemberNationalAssociationId=record['MemberNationalAssociationId'],
+  member = models.Member(MemberNationalAssociationId=record['MemberNationalAssociationId'],
                   MemberFirstName=record['MemberFirstName'],
                   MemberLastName=record['MemberLastName'],
                   MemberEmail=record['MemberEmail'],
                   LicenseInfo=record['LicenseInfo']
           )
           
-  result = search_licensee(member)
+  result = registry.search_licensee(member)
 
   if result['has_error']:
     return jsonify(
@@ -59,13 +51,13 @@ def registerLicensee():
   if record.get('LicenseInfo') is None:
      record['LicenseInfo'] = ""
   
-  member = Member(MemberNationalAssociationId=record['MemberNationalAssociationId'],
+  member = models.Member(MemberNationalAssociationId=record['MemberNationalAssociationId'],
                   MemberFirstName=record['MemberFirstName'],
                   MemberLastName=record['MemberLastName'],
                   MemberEmail=record['MemberEmail'],
                   LicenseInfo=record['LicenseInfo']
           )
-  result = search_licensee(member)
+  result = registry.search_licensee(member)
   
   if result['has_error']:
     return jsonify(
@@ -92,8 +84,6 @@ def registerLicensee():
       ), 201
 
 
-
-
 ### ADMIN METHODS ###
 API_KEY = '_admin_token' #TODO: add real admin tokens
 
@@ -109,7 +99,7 @@ def generateLicensees():
         message='Invalid Access Token!'
     ), 403
 
-  num_licensees = generate_licensees(num_licensees)
+  num_licensees = registry.generate_licensees(num_licensees)
   
   return jsonify(
         status=True,
@@ -135,7 +125,8 @@ def getLicensee():
         message='uli is required when making this request!'
     ), 400
 
-  licensee = find_licensee(uli)
+  licensee = registry.find_licensee(uli)
+
 
   if licensee:
     return jsonify(
@@ -169,7 +160,7 @@ def removeLicensee():
         message='uli is required when making this request!'
     ), 400
 
-  licensee = remove_licensee(uli)
+  licensee = registry.remove_licensee(uli)
 
   if licensee:
     return jsonify(
@@ -181,9 +172,3 @@ def removeLicensee():
         status=False,
         message='uli: ' + uli + ' not found!'
     ), 404
-
-
-if __name__ == "__main__":
-    ENVIRONMENT_DEBUG = os.environ.get("APP_DEBUG", True)
-    ENVIRONMENT_PORT = os.environ.get("APP_PORT", 5000)
-    app.run(host='0.0.0.0', port=ENVIRONMENT_PORT, debug=ENVIRONMENT_DEBUG)
