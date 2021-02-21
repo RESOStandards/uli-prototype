@@ -134,7 +134,7 @@ def test_remove_licensee_not_found(test_client):
   response = test_client.delete('/remove_licensee', data=json.dumps(FAKE_REMOVE_ULI_BODY), follow_redirects=True)
 
   assert response.status_code == 404
-  assert b"deleted!" in response.data
+  assert b"not found!" in response.data
 
 
 

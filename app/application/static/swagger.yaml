@@ -12,16 +12,14 @@ info:
     email: dconroy@gmail.com
   license:
     name: Apache 2.0
-    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
 host: 'localhost'
 basePath: /
 tags:
   - name: registration
-    description: Examples for registering licensees
-  - name: query
-    description: Examples for querying the registry
+    description: Registration and Query endpoints
   - name: admin
-    description: 'Administrative Functions like data generation, delete'
+    description: Administrative Functions like data generation, delete
 schemes:
   - http
 paths:
@@ -38,7 +36,7 @@ paths:
       parameters:
         - in: body
           name: body
-          description: Member object that needs to be added to the registery
+          description: Member object that needs to be added to the registry
           required: true
           schema:
             $ref: '#/definitions/Member'
@@ -50,7 +48,7 @@ paths:
   /query:
     post:
       tags:
-        - query
+        - registration
       summary: Queries a ULI
       description: ''
       produces:
@@ -60,7 +58,7 @@ paths:
       parameters:
         - in: body
           name: body
-          description: Member object that needs to be added to the registery
+          description: Member object that needs to be added to the registry
           required: true
           schema:
             $ref: '#/definitions/Member'
@@ -82,15 +80,15 @@ paths:
       parameters:
         - in: body
           name: body
-          description: Member object that needs to be added to the registery
+          description: Member object that needs to be added to the registry
           required: true
           schema:
-            $ref: '#/definitions/Member'
+            $ref: '#/definitions/AdminFindRequest'
       responses:
         '200':
           description: successful operation
           schema:
-            $ref: '#/definitions/RegistryResponse'
+            $ref: '#/definitions/AdminFindResponse'
   /generate_licensees:
     post:
       tags:
@@ -104,15 +102,15 @@ paths:
       parameters:
         - in: body
           name: body
-          description: Member object that needs to be added to the registery
+          description: Member object that needs to be added to the registry
           required: true
           schema:
-            $ref: '#/definitions/Member'
+            $ref: '#/definitions/GenerateDataRequest'
       responses:
         '200':
           description: successful operation
           schema:
-            $ref: '#/definitions/RegistryResponse'
+            $ref: '#/definitions/GenerateDataResponse'
   /remove_licensee:
     delete:
       tags:
@@ -126,7 +124,7 @@ paths:
       parameters:
         - in: body
           name: body
-          description: Delete object that needs to be added to the registery
+          description: Delete object that needs to be added to the registry
           required: true
           schema:
             $ref: '#/definitions/DeleteRequest'
@@ -141,6 +139,23 @@ paths:
 #     name: token
 #     in: header
 definitions:
+  AdminFindRequest:
+    type: object
+    properties:
+      token:
+        type: string
+        example: _admin_token
+      uli:
+        type: string
+        example: 6032f18a79272c4ef28d4119      
+  AdminFindResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: 'uli: 602ea7f240a9fbb7a6820673 not found!'
+      status:
+        type: boolean
   LicenseInfo:
     type: object
     properties:
@@ -179,6 +194,23 @@ definitions:
       message:
         type: string
         example: 6032940de1ba1c6d4d043062 not found!
+      status:
+        type: boolean
+  GenerateDataRequest:
+    type: object
+    properties:
+      token:
+        type: string
+        example: _admin_token
+      NumLicensees:
+        type: int
+        example: 100      
+  GenerateDataResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: 100 generated!
       status:
         type: boolean
   Member:
