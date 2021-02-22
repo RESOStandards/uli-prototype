@@ -1,7 +1,7 @@
 ![Test Flask App](https://github.com/RESOStandards/uli-prototype/workflows/Test%20Flask%20App/badge.svg)
 
 # Centralized ULI Registry Proof of Concept
-Welcome to the rough proof of concept of a centralized ULI Service
+This repository contains a prototyped API and Database for the RESO Unique Licensee Identifier Project. You can find out more about ULI at [reso.org](https://reso.org)
 
 
 ## Tech Stack
