@@ -76,65 +76,64 @@ def test_query_ULI_not_found(test_client):
 ############ Admin Functions #################
 ##############################################
 
-FAKE_ADMIN_TOKEN = '_admin_token' #TODO: add real admin tokens
-FAKE_GENERATION_RECORD = {   
-    "token": FAKE_ADMIN_TOKEN,
-    "NumLicensees": 100
-}
-FAKE_FIND_ULI_BODY = {
-    "token" :"_admin_token",
-    "uli" : "9999999999"
-}
-FAKE_REMOVE_ULI_BODY = {
-    "token" :"_admin_token",
-    "uli" : "9999999999"
-}
+FAKE_API_KEY = '_api_key' #TODO: add real admin keys/tokens
+FAKE_GENERATION_RECORD = {"NumLicensees": 100}
+FAKE_FIND_ULI_BODY = { "uli" : "9999999999" }
+FAKE_REMOVE_ULI_BODY = {"uli" : "9999999999" }
+ADMIN_HEADER = {'Content-Type': 'application/json', 'X-API-KEY': FAKE_API_KEY}
 
 
 def test_find_ULI(test_client):
-  response = test_client.post('/register', data=json.dumps(FAKE_TESTING_RECORD), follow_redirects=True)
+  response = test_client.post('/register',  data=json.dumps(FAKE_TESTING_RECORD), follow_redirects=True)
   response_data = json.loads(response.data)
-  FIND_ULI_BODY = {
-    "token" :"_admin_token",
-    "uli" : response_data["uli"]
-    }
-  response = test_client.post('/find_licensee', data=json.dumps(FIND_ULI_BODY), follow_redirects=True)
+  FIND_ULI_BODY = {"uli" : response_data["uli"]}
+  response = test_client.post('/find_licensee', headers = ADMIN_HEADER, data=json.dumps(FIND_ULI_BODY), follow_redirects=True)
  
   assert response.status_code == 200
 
-
 def test_find_ULI_not_found(test_client):
-  response = test_client.post('/find_licensee', data=json.dumps(FAKE_FIND_ULI_BODY), follow_redirects=True)
+  response = test_client.post('/find_licensee', headers = ADMIN_HEADER, data=json.dumps(FAKE_FIND_ULI_BODY), follow_redirects=True)
  
   assert response.status_code == 404
 
+def test_require_apikey_find_uli(test_client):
+  response = test_client.post('/find_licensee', data=json.dumps(FAKE_FIND_ULI_BODY), follow_redirects=True)
+
+  assert response.status_code == 403
+
 def test_admin_generate_licensees(test_client):
-  response = test_client.post('/generate_licensees', data=json.dumps(FAKE_GENERATION_RECORD), follow_redirects=True)
+  response = test_client.post('/generate_licensees', headers = ADMIN_HEADER, data=json.dumps(FAKE_GENERATION_RECORD), follow_redirects=True)
   response_data = json.loads(response.data)
 
   assert response.status_code == 201
   assert b"100 generated!" in response.data
   assert response_data["status"] is True
 
+def test_require_apikey_generate_licensee(test_client):
+  response = test_client.post('/generate_licensees', data=json.dumps(FAKE_FIND_ULI_BODY), follow_redirects=True)
+  
+  assert response.status_code == 403
+
+
 def test_remove_licensee(test_client):
-  response = test_client.post('/register', data=json.dumps(FAKE_TESTING_RECORD), follow_redirects=True)
+  response = test_client.post('/register', headers = ADMIN_HEADER, data=json.dumps(FAKE_TESTING_RECORD), follow_redirects=True)
   response_data = json.loads(response.data)
-  REMOVE_ULI_BODY = {
-    "token" :"_admin_token",
-    "uli" : response_data["uli"]
-  }
-
-  response = test_client.delete('/remove_licensee', data=json.dumps(REMOVE_ULI_BODY), follow_redirects=True)
-
+  REMOVE_ULI_BODY = {"uli" : response_data["uli"]}
+  response = test_client.delete('/remove_licensee', headers = ADMIN_HEADER, data=json.dumps(REMOVE_ULI_BODY), follow_redirects=True)
+  
   assert response.status_code == 200
   assert b"deleted!" in response.data
 
-
 def test_remove_licensee_not_found(test_client):
-  response = test_client.delete('/remove_licensee', data=json.dumps(FAKE_REMOVE_ULI_BODY), follow_redirects=True)
-
+  response = test_client.delete('/remove_licensee', headers = ADMIN_HEADER, data=json.dumps(FAKE_FIND_ULI_BODY), follow_redirects=True)
   assert response.status_code == 404
   assert b"not found!" in response.data
+
+def test_require_apikey_remove_licensee(test_client):
+  response = test_client.delete('/remove_licensee', data=json.dumps(FAKE_FIND_ULI_BODY), follow_redirects=True)
+  assert response.status_code == 403
+
+
 
 
 
