@@ -76,7 +76,7 @@ def test_query_ULI_not_found(test_client):
 ############ Admin Functions #################
 ##############################################
 
-FAKE_API_KEY = '_api_key' #TODO: add real admin tokens
+FAKE_API_KEY = '_api_key' #TODO: add real admin keys/tokens
 FAKE_GENERATION_RECORD = {"NumLicensees": 100}
 FAKE_FIND_ULI_BODY = { "uli" : "9999999999" }
 FAKE_REMOVE_ULI_BODY = {"uli" : "9999999999" }
@@ -114,15 +114,15 @@ def test_require_apikey_generate_licensee(test_client):
   
   assert response.status_code == 403
 
+
 def test_remove_licensee(test_client):
   response = test_client.post('/register', headers = ADMIN_HEADER, data=json.dumps(FAKE_TESTING_RECORD), follow_redirects=True)
   response_data = json.loads(response.data)
   REMOVE_ULI_BODY = {"uli" : response_data["uli"]}
-
   response = test_client.delete('/remove_licensee', headers = ADMIN_HEADER, data=json.dumps(REMOVE_ULI_BODY), follow_redirects=True)
+  
   assert response.status_code == 200
   assert b"deleted!" in response.data
-
 
 def test_remove_licensee_not_found(test_client):
   response = test_client.delete('/remove_licensee', headers = ADMIN_HEADER, data=json.dumps(FAKE_FIND_ULI_BODY), follow_redirects=True)
