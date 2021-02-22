@@ -85,18 +85,18 @@ def registerLicensee():
 
 
 ### ADMIN METHODS ###
-API_KEY = '_admin_token' #TODO: add real admin tokens
+API_KEY = '_api_key' #TODO: add real admin tokens
 
 @app.route('/generate_licensees', methods=['POST'])
 def generateLicensees():
   post_data = request.get_json(force=True)
-  api_key = post_data.get('token', None)
+  api_key=request.headers.get('X-API-KEY')
   num_licensees = post_data.get('NumLicensees', None)
   
   if api_key is None or api_key != API_KEY:
     return jsonify(
         status=False,
-        message='Invalid Access Token!'
+        message='Invalid API Key!'
     ), 403
 
   num_licensees = registry.generate_licensees(num_licensees)
@@ -109,14 +109,14 @@ def generateLicensees():
 @app.route('/find_licensee', methods=['POST'])
 def getLicensee():
   """This method fetches ULIs by Id"""
+  api_key=request.headers.get('X-API-KEY')
   post_data = request.get_json(force=True)
-  api_key = post_data.get('token', None)
   uli = post_data.get('uli', None)
 
   if api_key is None or api_key != API_KEY:
     return jsonify(
         status=False,
-        message='Invalid Access Token!'
+        message='Invalid API Key!'
     ), 403
 
   if uli is None:
@@ -142,14 +142,13 @@ def getLicensee():
 def removeLicensee():
   """This method is primarily used for testing purposes and requires a token"""
   post_data = request.get_json(force=True)
-  
-  api_key = post_data.get('token', None)
+  api_key=request.headers.get('X-API-KEY')
   uli = post_data.get('uli', None)
 
   if api_key is None or api_key != API_KEY:
     return jsonify(
         status=False,
-        message='Invalid Access Token!'
+        message='Invalid API Key!'
     ), 403
 
   if uli is None:
