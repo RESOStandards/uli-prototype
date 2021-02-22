@@ -127,12 +127,10 @@ def getLicensee():
 
   licensee = registry.find_licensee(uli)
 
-
   if licensee:
     return jsonify(
         status=True,
-        message='ULI found!',
-        uli=uli
+        message='ULI found!'
     ), 200
   else:
     return jsonify(

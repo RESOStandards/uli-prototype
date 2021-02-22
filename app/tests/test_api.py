@@ -7,6 +7,8 @@ class TestConfig:
     """Base config."""
     STATIC_FOLDER = 'static'
     TEMPLATES_FOLDER = 'templates'
+    SWAGGER_URL = '/api/docs'  
+    API_URL = '/static/swagger.yaml'  
     FLASK_ENV = 'development'
     DEBUG = True
     TESTING = True
@@ -83,6 +85,11 @@ FAKE_FIND_ULI_BODY = {
     "token" :"_admin_token",
     "uli" : "9999999999"
 }
+FAKE_REMOVE_ULI_BODY = {
+    "token" :"_admin_token",
+    "uli" : "9999999999"
+}
+
 
 def test_find_ULI(test_client):
   response = test_client.post('/register', data=json.dumps(FAKE_TESTING_RECORD), follow_redirects=True)
@@ -121,6 +128,13 @@ def test_remove_licensee(test_client):
 
   assert response.status_code == 200
   assert b"deleted!" in response.data
+
+
+def test_remove_licensee_not_found(test_client):
+  response = test_client.delete('/remove_licensee', data=json.dumps(FAKE_REMOVE_ULI_BODY), follow_redirects=True)
+
+  assert response.status_code == 404
+  assert b"not found!" in response.data
 
 
 

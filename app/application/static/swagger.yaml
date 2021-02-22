@@ -1,0 +1,239 @@
+swagger: '2.0'
+info:
+  description: >-
+    This is a prototype version of a centralized ULI server.  You can find out more about ULI at
+    [https://reso.org](https://reso.org). For this proof of concept, you can use the api
+    key `_admin_token` to test the authorization filters.
+  version: 1.0.0
+  title: Centralized Universal Licensee Idenfitifaction Service
+  termsOfService: >-
+    https://2xx2gy2ovf3r21jclkjio3x8-wpengine.netdna-ssl.com/wp-content/uploads/2021/01/191223-RESO-2020-websitetermsconditions-clean-2021.pdf
+  contact:
+    email: dconroy@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+host: 'localhost'
+basePath: /
+tags:
+  - name: registration
+    description: Registration and Query endpoints
+  - name: admin
+    description: Administrative Functions like data generation, delete
+schemes:
+  - http
+paths:
+  /register:
+    post:
+      tags:
+        - registration
+      summary: Registers a ULI
+      description: ''
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Member object that needs to be added to the registry
+          required: true
+          schema:
+            $ref: '#/definitions/Member'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/RegistryResponse'
+  /query:
+    post:
+      tags:
+        - registration
+      summary: Queries a ULI
+      description: ''
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Member object that needs to be added to the registry
+          required: true
+          schema:
+            $ref: '#/definitions/Member'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/RegistryResponse'
+  /find_licensee:
+    post:
+      tags:
+        - admin
+      summary: Verifies if a ULI is in the registry
+      description: ''
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Member object that needs to be added to the registry
+          required: true
+          schema:
+            $ref: '#/definitions/AdminFindRequest'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AdminFindResponse'
+  /generate_licensees:
+    post:
+      tags:
+        - admin
+      summary: Generates fake licensee data
+      description: ''
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Member object that needs to be added to the registry
+          required: true
+          schema:
+            $ref: '#/definitions/GenerateDataRequest'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/GenerateDataResponse'
+  /remove_licensee:
+    delete:
+      tags:
+        - admin
+      summary: Removes a ULI
+      description: ''
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Delete object that needs to be added to the registry
+          required: true
+          schema:
+            $ref: '#/definitions/DeleteRequest'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/DeleteResponse'
+# securityDefinitions:
+#   api_key:
+#     type: apiKey
+#     name: token
+#     in: header
+definitions:
+  AdminFindRequest:
+    type: object
+    properties:
+      token:
+        type: string
+        example: _admin_token
+      uli:
+        type: string
+        example: 6032f18a79272c4ef28d4119      
+  AdminFindResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: 'uli: 602ea7f240a9fbb7a6820673 not found!'
+      status:
+        type: boolean
+  LicenseInfo:
+    type: object
+    properties:
+      agency:
+        type: string
+        example: SD
+      number:
+        type: string
+        example: 738532
+      type:
+        type: string
+        example: Broker
+  RegistryResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: ULI saved successfully!
+      status:
+        type: boolean
+      uli:
+        type: string
+        example: 602c6bbead2cef1872ea1e8d
+  DeleteRequest:
+    type: object
+    properties:
+      token:
+        type: string
+        example: _admin_token
+      uli:
+        type: string
+        example: 602c6bbead2cef1872ea1e8d      
+  DeleteResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: 6032940de1ba1c6d4d043062 not found!
+      status:
+        type: boolean
+  GenerateDataRequest:
+    type: object
+    properties:
+      token:
+        type: string
+        example: _admin_token
+      NumLicensees:
+        type: int
+        example: 100      
+  GenerateDataResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: 100 generated!
+      status:
+        type: boolean
+  Member:
+    type: object
+    required:
+      - MemberFirstName
+      - MemberLastName
+      - MemberEmail
+    properties:
+      MemberNationalAssociationId:
+        type: string
+        example: hjRWlmDkIHlxvrcQTbYBSvmKvVRcBw
+      MemberFirstName:
+        type: string
+        example: Tracy
+      MemberLastName:
+        type: string
+        example: Washington
+      MemberEmail:
+        type: string
+        example: william05@marquez.com
+      LicenseInfo:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/LicenseInfo'
