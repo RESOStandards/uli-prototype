@@ -8,7 +8,7 @@ This repository contains a prototyped API and Database for the RESO Unique Licen
 * Python 3 Flask API w/ Gunicorn
 * MongoDB
 * NGINX
-* Docker Compose for ease in local development
+* Docker and Docker-Compose (for local development)
 
 ## Running Locally
 To run, simply bring up the webserver, web app,  and database with the following commands. You may then edit the flask app from the /app directory which hot reloads inside the container.
