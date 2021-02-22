@@ -67,7 +67,7 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/RegistryResponse'
-  /find_licenses:
+  /find_licensee:
     post:
       tags:
         - admin
@@ -173,7 +173,7 @@ definitions:
     properties:
       message:
         type: string
-        example: Found ULI!
+        example: ULI saved successfully!
       status:
         type: boolean
       uli:
