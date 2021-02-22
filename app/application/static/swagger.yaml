@@ -150,9 +150,6 @@ definitions:
   AdminFindRequest:
     type: object
     properties:
-      token:
-        type: string
-        example: _api_key
       uli:
         type: string
         example: 6032f18a79272c4ef28d4119      
@@ -190,9 +187,6 @@ definitions:
   DeleteRequest:
     type: object
     properties:
-      token:
-        type: string
-        example: _api_key
       uli:
         type: string
         example: 602c6bbead2cef1872ea1e8d      
@@ -207,9 +201,6 @@ definitions:
   GenerateDataRequest:
     type: object
     properties:
-      token:
-        type: string
-        example: _api_key
       NumLicensees:
         type: int
         example: 100      
