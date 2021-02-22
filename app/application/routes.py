@@ -5,13 +5,15 @@ from . import registry
 
 @app.route('/')
 def index():
-    return jsonify(
-        status=True,
-        message='Welcome to the ULI Registry app!'
-    )
+  """This method returns a one line home page"""
+  return jsonify(
+      status=True,
+      message='Welcome to the ULI Registry app!'
+  )
 
 @app.route('/query', methods=['POST'])
 def licensee():
+  """This method is not often used but can tell you if a ULI exists for a member without creating one"""
   record = json.loads(request.data)
   #license info optional
   if record.get('LicenseInfo') is None:
@@ -47,6 +49,7 @@ def licensee():
 
 @app.route('/register', methods=['POST'])
 def registerLicensee():
+  """This method is used for registering a new ULI if one does exist"""
   record = json.loads(request.data)
   if record.get('LicenseInfo') is None:
      record['LicenseInfo'] = ""
@@ -85,10 +88,11 @@ def registerLicensee():
 
 
 ### ADMIN METHODS ###
-API_KEY = '_api_key' #TODO: add real admin tokens
+API_KEY = '_api_key' #TODO: add real admin api keys/ tokens
 
 @app.route('/generate_licensees', methods=['POST'])
 def generateLicensees():
+  """This method is primarily used for testing purposes and generates X number of fake licensees"""
   post_data = request.get_json(force=True)
   api_key=request.headers.get('X-API-KEY')
   num_licensees = post_data.get('NumLicensees', None)
@@ -140,7 +144,7 @@ def getLicensee():
   
 @app.route('/remove_licensee', methods=['DELETE'])
 def removeLicensee():
-  """This method is primarily used for testing purposes and requires a token"""
+  """This method is primarily used for testing purposes and requires an api key"""
   post_data = request.get_json(force=True)
   api_key=request.headers.get('X-API-KEY')
   uli = post_data.get('uli', None)
